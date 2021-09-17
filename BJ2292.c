@@ -9,7 +9,7 @@ int main() {
 		int a = 3*n*(n + 1);
 		
 		if (N == 1)
-		{
+		 { 
 			printf("%d", N);
 			break;
 		}
