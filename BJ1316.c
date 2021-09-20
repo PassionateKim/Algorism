@@ -16,6 +16,7 @@ int main()
 		char first = '0';
 		int Alphabet[26] = {0, };
 		scanf("%s", input_words);
+
 		for (int j = 0; input_words[j] != '\0'; j++)
 		{
 			
