@@ -3,13 +3,13 @@
 int main() {
 	int T;
 	scanf("%d", &T);
-	double x, y, n; //nÀº °Å¸®
+	double x, y, n; //nì€ ê±°ë¦¬
 	int a;
 	for (int i = 0; i < T; i++)
 	{
 		scanf("%lf %lf", &x, &y);
-		n = y - x;//45 50 ÀÌµç 0 5ÀÌµç °ø°£ ÀÌµ¿ ÀåÄ¡ ÀÛµ¿ È½¼ö
-				  //Â÷ÀÌ ¾øÀ½ 
+		n = y - x;//45 50 ì´ë“  0 5ì´ë“  ê³µê°„ ì´ë™ ì¥ì¹˜ ì‘ë™ íšŸìˆ˜
+				  //ì°¨ì´ ì—†ìŒ 
 		a = (int)sqrt(n);
 
 		if ((int)(n) == a * a)
