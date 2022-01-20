@@ -9,8 +9,8 @@ int main() {
 	for (int i = 0; i < T; i++)
 	{
 		int H, W, N;
-		int floor; //Ãþ
-		int room_num; //È£¼ö
+		int floor; //ÃƒÃ¾
+		int room_num; //ÃˆÂ£Â¼Ã¶
 		scanf("%d %d %d", &H, &W, &N);
 		if ((N % H) == 0)
 		{
