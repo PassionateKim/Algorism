@@ -4,8 +4,8 @@
 int main()
 {
 	
-	char input_words[101]; //���ڿ� �迭
-	int N ; //input �� N
+	char input_words[101]; //¹®ÀÚ¿­ ¹è¿­
+	int N ; //input °ª N
 	scanf("%d", &N);
 	
 	
