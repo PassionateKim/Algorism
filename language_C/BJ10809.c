@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <string.h> //strlen ÇÔ¼ö¸¦ À§ÇÑ °Í 
+#include <string.h> //strlen Ã‡Ã”Â¼Ã¶Â¸Â¦ Ã€Â§Ã‡Ã‘ Â°Ã 
 
 int main() {
 
