@@ -5,7 +5,7 @@ int main() {
 	int input;
 	scanf("%d", &input);
 	int k = 1;
-	while (1) //¶óÀÎ Ã£±â
+	while (1) //ë¼ì¸ ì°¾ê¸°
 	{		
 		if ((k-1)*(k)/2 < input && input <= (k)*(k+1)/2)
 		{
@@ -14,7 +14,7 @@ int main() {
 		k++;
 	}
 
-	if (k % 2 != 0) // È¦¼öÀÏ ¶§
+	if (k % 2 != 0) // í™€ìˆ˜ì¼ ë•Œ
 	{
 		int a = k*(k + 1) / 2;
 		printf("%d", a-input + 1);
@@ -22,7 +22,7 @@ int main() {
 		printf("%d", k - (a - input));
 	
 	}
-	else //Â¦¼ö ÀÏ ¶§
+	else //ì§ìˆ˜ ì¼ ë•Œ
 	{
 		int a = k * (k + 1) / 2;
 		printf("%d",k-(a-input));
