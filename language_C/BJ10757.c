@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 
-void reverse(char arr[]) //¹®ÀÚ¿­ ¿ª¼ø Á¤·Ä
+void reverse(char arr[]) //ë¬¸ìì—´ ì—­ìˆœ ì •ë ¬
 {
 	int len = strlen(arr);
 	for (int i = 0; i < len / 2; i++) 
@@ -17,14 +17,14 @@ int main() {
 	char A[10002] = { 0 };
 	char B[10002] = { 0 };
 	char res[10003] = { 0 };
-	int carry = 0; //ÀÚ¸®¼ö ¿Ã¸²
+	int carry = 0; //ìë¦¬ìˆ˜ ì˜¬ë¦¼
 	int len = 0;
 	scanf("%s %s", A, B);
 
 	reverse(A);
 	reverse(B);
 
-	if (strlen(A) > strlen(B)) //Å«¼ö ±âÁØ 
+	if (strlen(A) > strlen(B)) //í°ìˆ˜ ê¸°ì¤€ 
 	{
 		len = strlen(A);
 	}
@@ -35,14 +35,14 @@ int main() {
 
 	for (int i = 0; i < len; i++)
 	{
-		int sum = A[i] - '0' + B[i] - '0' + carry; //ASCII ÄÚµå º¸¸ç ÀÌÇØÇÒ °Í
-		if (sum < 0)//ÀÚ¸®¼ö°¡ ´Ù¸¦°æ¿ì(sum < 0) sumÀº -'0'ÀÌ ÇÑ¹ø ´õ °è»êµÊ
+		int sum = A[i] - '0' + B[i] - '0' + carry; //ASCII ì½”ë“œ ë³´ë©° ì´í•´í•  ê²ƒ
+		if (sum < 0)//ìë¦¬ìˆ˜ê°€ ë‹¤ë¥¼ê²½ìš°(sum < 0) sumì€ -'0'ì´ í•œë²ˆ ë” ê³„ì‚°ë¨
 		{
-			sum += '0';//±×·±°æ¿ì +'0'À» ÇØ¼­ ¸ÂÃçÁØ´Ù.
+			sum += '0';//ê·¸ëŸ°ê²½ìš° +'0'ì„ í•´ì„œ ë§ì¶°ì¤€ë‹¤.
 		}
 		if (sum > 9)
 		{
-			carry = 1; //´õÇÑ°ÍÀÌ 9¸¦ ³Ñ¾î°¡¸é ±× ´ÙÀ½ÀÚ¸®¼ö +1 ÇØÁà¾ßÇÏ¹Ç·Î
+			carry = 1; //ë”í•œê²ƒì´ 9ë¥¼ ë„˜ì–´ê°€ë©´ ê·¸ ë‹¤ìŒìë¦¬ìˆ˜ +1 í•´ì¤˜ì•¼í•˜ë¯€ë¡œ
 		}
 		else
 		{
@@ -50,7 +50,7 @@ int main() {
 		}
 		res[i] = sum % 10 +'0';
 	}
-	if (carry == 1)//¸¶Áö¸·ÀÚ¸®ÀÇ sumÀÌ 9¸¦ ³ÑÀ¸¸é ÀÚ¸®¼ö°¡ ÇÏ³ª ´õ Ä¿Áö¹Ç·Î 
+	if (carry == 1)//ë§ˆì§€ë§‰ìë¦¬ì˜ sumì´ 9ë¥¼ ë„˜ìœ¼ë©´ ìë¦¬ìˆ˜ê°€ í•˜ë‚˜ ë” ì»¤ì§€ë¯€ë¡œ 
 	{
 		res[len] = '1';
 	}
