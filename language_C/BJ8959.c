@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <string.h>    // strlen ÇÔ¼ö°¡ ¼±¾ğµÈ Çì´õ ÆÄÀÏ
+#include <string.h>    // strlen í•¨ìˆ˜ê°€ ì„ ì–¸ëœ í—¤ë” íŒŒì¼
 
 
 int main()
@@ -7,22 +7,22 @@ int main()
 	int Test_case;
 
 
-	//Testcase ÀÇ °³¼ö ÀÔ·Â
-	printf("TestcaseÀÇ °³¼ö¸¦ ÀÔ·ÂÇÏ½Ã¿À\n");
+	//Testcase ì˜ ê°œìˆ˜ ì…ë ¥
+	printf("Testcaseì˜ ê°œìˆ˜ë¥¼ ì…ë ¥í•˜ì‹œì˜¤\n");
 	scanf("%d", &Test_case);
 
 	int count;
 	int total;
-	//¹®ÀÚ¿­Àº 0º¸´Ù Å©°í 80º¸´Ù ÀÛÀ¸¹Ç·Î 
-	char score[79]; //¹®ÀÚ¿­ Çü½ÄÀ¸·Î ¹è¿­ ¼±¾ğ (0~79)
+	//ë¬¸ìì—´ì€ 0ë³´ë‹¤ í¬ê³  80ë³´ë‹¤ ì‘ìœ¼ë¯€ë¡œ 
+	char score[79]; //ë¬¸ìì—´ í˜•ì‹ìœ¼ë¡œ ë°°ì—´ ì„ ì–¸ (0~79)
 
 	for (int i = 0; i < Test_case; i++) {
 
 		total = 0;
-		count = 1; //¿©±â¼­ ÃÊ±âÈ­¸¦ ÇØÁÖ¾î¾ß ´ÙÀ½ ½ÎÀÌÅ¬¿¡ ¿µÇâÀ» ÁÖÁö ¾Ê´Â´Ù 
+		count = 1; //ì—¬ê¸°ì„œ ì´ˆê¸°í™”ë¥¼ í•´ì£¼ì–´ì•¼ ë‹¤ìŒ ì‹¸ì´í´ì— ì˜í–¥ì„ ì£¼ì§€ ì•ŠëŠ”ë‹¤ 
 
 
-		printf("ÀÔ·Â:");
+		printf("ì…ë ¥:");
 		scanf("%s", score);
 
 
