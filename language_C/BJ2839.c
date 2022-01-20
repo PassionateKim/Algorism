@@ -5,7 +5,7 @@ int main()
 	scanf("%d", &N); //4
 	int cnt = 0;
 
-	if (N % 5 == 0) //¾Æ´Ï¹Ç·Î pass
+	if (N % 5 == 0) //ì•„ë‹ˆë¯€ë¡œ pass
 	{
 		cnt = cnt + N / 5;
 		printf("%d", cnt);
@@ -28,7 +28,7 @@ int main()
 			{
 				Q = Q - 1; // 
 			}
-			if (Q == -1) // x = 0 ÀÏ ¶§ Á¶Â÷ ¾ÈµÈ caseÀÌ¹Ç·Î -1
+			if (Q == -1) // x = 0 ì¼ ë•Œ ì¡°ì°¨ ì•ˆëœ caseì´ë¯€ë¡œ -1
 			{
 				printf("-1");
 				return 0;
