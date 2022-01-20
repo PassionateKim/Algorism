@@ -11,7 +11,7 @@ int main() {
 		printf("-1");
 	}
 
-	else// C>B ÀÎ °æ¿ì
+	else// C>B Ã€ÃŽ Â°Ã¦Â¿Ã¬
 	{
 		x = A / (C - B);
 		printf("%d", (int)x + 1);
