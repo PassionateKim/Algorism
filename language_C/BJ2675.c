@@ -1,10 +1,10 @@
 #include <stdio.h>
-#include <string.h> //strtok ÇÔ¼ö¸¦ À§ÇÑ °Í 
+#include <string.h> //strtok í•¨ìˆ˜ë¥¼ ìœ„í•œ ê²ƒ 
 
 int main() {
-	int T = 0; //TEST CASE °³¼ö 
-	char input[22]; //R+space+chleo 20±ÛÀÚ <=22 ÀÌ¹Ç·Î ±æÀÌ 22ÀÎ char Çü ¹è¿­ ¼±¾ð 
-	int M = 0;; // ÁÂÃøÀÇ ¼ö 
+	int T = 0; //TEST CASE ê°œìˆ˜ 
+	char input[22]; //R+space+chleo 20ê¸€ìž <=22 ì´ë¯€ë¡œ ê¸¸ì´ 22ì¸ char í˜• ë°°ì—´ ì„ ì–¸ 
+	int M = 0;; // ì¢Œì¸¡ì˜ ìˆ˜ 
 	int cnt = 0;
 	scanf("%d", &T);
 
