@@ -1,4 +1,4 @@
-sum = 0
-for a in range(1,5):
-    sum = sum + a
-    print(sum)
+num = int(input())
+i = 2
+for i in range(i,num):
+    print(i)
