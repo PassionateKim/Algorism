@@ -1,13 +1,4 @@
-#1929번 소수 구하기  에라토스테네스의 체
-
-
-
-
-M,N = input().split()
-
-
-M = int(M)
-N = int(N)
+#베르트랑 공준 
 
 
 def isPrime(n):
@@ -22,6 +13,13 @@ def isPrime(n):
         return True
 
 
-for i in range(M,N+1):
-    if(isPrime(i)):
-        print(i)
+
+while True:
+    M = int(input())
+    if(M == 0):
+        break
+    N = 0       
+    for i in range(M+1,2*M+1):
+        if(isPrime(i)):
+            N = N+1
+    print(N)
