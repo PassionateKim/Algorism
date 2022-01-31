@@ -18,13 +18,14 @@ for i in all_list:
     if isPrime(i):
         prime_list.append(i)
 
-print(prime_list)
+
 
 T = int(input())
 
 for i in range(1,T+1):
     n = int(input())
-    print("예제입력: "+str(n))
+    half = n//2
+
     
 
 
