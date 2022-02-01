@@ -1,5 +1,4 @@
 #골드바흐의 추측
-
 def isPrime(n):
     if(n == 1):
         return False
@@ -25,6 +24,11 @@ T = int(input())
 for i in range(1,T+1):
     n = int(input())
     half = n//2
+    for j in range(half,1,-1):
+        if(j in prime_list) and (n-j in prime_list):
+            print(j, n-j)
+            break
+        
 
     
 
