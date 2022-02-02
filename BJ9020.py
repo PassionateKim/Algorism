@@ -28,10 +28,3 @@ for i in range(1,T+1):
         if(j in prime_list) and (n-j in prime_list):
             print(j, n-j)
             break
-        
-
-    
-
-
-
-
