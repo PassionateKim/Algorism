@@ -23,6 +23,7 @@ for i in all_list:
 M = int(input())
 N = int(input())
 
+#배열의 인덱스, sum을 활용하는 아이디어 
 specific_prime_list = []
 for i in range(M,N+1):
     if(i in prime_list):
