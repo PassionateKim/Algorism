@@ -10,12 +10,10 @@ sums =set()
 
 for i in cards:
     for j in cards:
-        if j == i:
-           continue
-        for k in cards:
-            if k == i or k == j:
-                continue
-            sums.add(i + j + k)
+        if j > i:
+            for k in cards:
+               if k > j:
+                sums.add(i + j + k)
 sums = list(sums)
 sums.sort()
 
