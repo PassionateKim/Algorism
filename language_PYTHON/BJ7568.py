@@ -9,7 +9,7 @@ for i in range(1,N+1):
 for i in range(len(frames)):
     score = 1
     for j in range(len(frames)):
-        if(i != j and frames[i][0]<frames[j][0] & frames[i][1]<frames[j][1]):
+        if(i != j and frames[i][0]<frames[j][0] and frames[i][1]<frames[j][1]):
             score += 1
     print(score, end=" ")
 
