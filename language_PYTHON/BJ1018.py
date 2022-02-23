@@ -18,25 +18,27 @@ for y in range(N-7):
     #열
     for x in range(M-7):
         index = 0
+        index2 = 0
         #BWBW 8x8 
         for i in range(y,y+8):
             for j in range(x,x+8):
             #WBWBWBWB
             #BWBWBWBW에서 W인 것들의 공통점은 행 + 열의 값이 짝수라는 것
-                if((i+j) % 2 == 0):
+                if((i+j) % 2 == 0): #()?? 필수
                     if(board[i][j] != 'W'):
-                        print(i,j)
                         index += 1
+                    if(board[i][j] != 'B'):
+                        index2 += 1
                 else:
                     if(board[i][j] != 'B'):
-                        print(i,j)
                         index += 1
-        count.append(index)
+                    if(board[i][j] != 'W'):
+                        index2 += 1 # +=를 =+로...
+                
+        count.append(min(index,index2))
 
 
-print(count)
+print(min(count))
+
+
             
-
-            
-
-    
