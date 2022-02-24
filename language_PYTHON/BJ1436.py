@@ -2,21 +2,25 @@
 
 from tabnanny import check
 
-
 end_num = []
 
-a = 666
 N = int(input())
 n = 0
+a = 666
 while n < N:
-    if "666" in str(a):
-        print("666 in a")
-        end_num.append(a)
-        n += 1
+    check_num = list(map(int,str(a)))
+    
+    reversed_num = list(reversed(check_num))
+    
+    x =0
+    for i in reversed_num:
+        if(i == 6):
+            x += 1
+            
+        elif(i != 6):
+            x = 0        
+        if(x == 3):
+            end_num.append(a)
+            n += 1   
     a += 1
-    
 print(end_num[-1])
-    
-
-        
-
