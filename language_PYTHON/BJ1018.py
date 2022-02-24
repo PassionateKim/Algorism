@@ -10,7 +10,6 @@ count = []
 for i in range(N):
     board.append(input())
 
-
 #8 x 8 돌리기
 #행렬은 왼쪽 상단이 (0,0)임
 #행
@@ -19,7 +18,7 @@ for y in range(N-7):
     for x in range(M-7):
         index = 0
         index2 = 0
-        #BWBW 8x8 
+        #8x8 
         for i in range(y,y+8):
             for j in range(x,x+8):
             #WBWBWBWB
@@ -33,11 +32,10 @@ for y in range(N-7):
                     if(board[i][j] != 'B'):
                         index += 1
                     if(board[i][j] != 'W'):
-                        index2 += 1 # +=를 =+로...
+                        index2 += 1 
                 
         count.append(min(index,index2))
-
-
+i
 print(min(count))
 
 
