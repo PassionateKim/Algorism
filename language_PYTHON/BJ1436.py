@@ -9,7 +9,7 @@ n = 0
 a = 666
 while n < N:
     check_num = list(map(int,str(a)))
-    
+
     reversed_num = list(reversed(check_num))
     
     x =0
@@ -21,6 +21,7 @@ while n < N:
             x = 0        
         if(x == 3):
             end_num.append(a)
-            n += 1   
+            n += 1
+            break
     a += 1
 print(end_num[-1])
