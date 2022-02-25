@@ -8,15 +8,15 @@ for i in range(N):
     numbers.append(int(input()))
 
 
-def insert_sort(x):
-    for i in range(1,len(x)):
-        j = i-1
-        key = x[i]
-        while x[j] > key and j >= 0:
-            x[j+1]=x[j]
-            j = j-1
-            x[j+1] = key
+def bubble_sort(x):
+    length = len(x)-1
+    for i in range(length):
+        for j in range(length-i):
+            if x[j] > x[j+1]:
+                x[j], x[j+1] = x[j+1], x[j]
     return x
-numbers = insert_sort(numbers)
+    
+numbers = bubble_sort(numbers)
 for i in numbers:
     print(i)
+
