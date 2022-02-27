@@ -1,55 +1,51 @@
-#수 정렬하기2 
+from array import array
+from lib2to3.pgen2.token import RIGHTSHIFT
+from re import A
+from tkinter import ARC
 
-#합병 정렬
-def mergemerge(arr):
-    if len(arr) <= 1:
-        print("1자리수인 예외 경우 arr",arr)
-        return arr
+
+def merge_sort(array):
+    if len(array) <= 1:
+        return array
+
+    mid = len(array) //2    
+    print(array[:mid],array[mid:])
+    left, right = merge_sort(array[:mid]),merge_sort(array[mid:])
+    print("left:"+str(left),"right:"+str(right),"mid:"+str(mid))
+    i,j,k = 0,0,0
     
-    mid = len(arr)//2
-    mrg = []
-    print("merge함수 시작",arr)
-    print("arr[:mid ",arr[:mid],"arr[mid:]",arr[mid:])
-    left, right = mergemerge(arr[:mid]),mergemerge(arr[mid:])
     
-    print("--",left,right)
-    i,j = 0,0
-    k =0
     while i < len(left) and j < len(right):
-        print("while문 시작")
-        k += 1
         if left[i] <right[j]:
-            print("** left {0} < right {1}이므로 ".format(i,j))
-            mrg.append(left[i])
-            print("mrg:"+str(mrg[:]))
+            array[k] =left[i]
             i += 1
         else:
-            print("** left {0} >= right {1}이므로 ".format(i,j))
-            mrg.append(right[j])
-            print("mrg:"+str(mrg[:]))
+            array[k] = right[j]
+            j +=1
+        k += 1
+    print("i:",i,"j:",j)
+    if i == len(left): #한쪽 리스트가 끝난 경우, 나머지 리스트를 넣어줌
+        print("--i = len(left")
+        while j < len(right):
+            array[k] = right[j]
             j += 1
-    print("while문 횟수,i,j",k,i,j)
-    if i != len(left):
-        print("if 문의 i {0} != len(left) {1}".format(i,len(left)))
-        print(left[i:])
-        mrg += left[i:]
-        print("mrg:"+str(mrg[:]))
-    if j != len(right):
-        print("if 문의 j {0} != len(left) {1}".format(j,len(right)))
-        mrg += right[j:]
-        print("mrg:"+str(mrg[:]))
-    
-    print(mrg)
-    print("left,right",left,right)
-    print("mrg return")
-    return mrg 
+            k += 1
+    elif j == len(right):
+        print("--j = len(right)")
+        while i < len(left):
+            array[k] = left[i]
+            i += 1
+            k += 1
+    print("return! array:",array)
+    return array
 
-N = int(input())
+n = int(input())
+array = []
 
-arr =[]
-for i in range(N):
-    arr.append(int(input()))
+for _ in range(n):
+    array.append(int(input()))
 
-answer = mergemerge(arr)
-print("answer: ",answer)
+array = merge_sort(array)
 
+for data in array:
+    print(data)
