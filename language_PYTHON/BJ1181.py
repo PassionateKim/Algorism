@@ -9,5 +9,9 @@ N = int(input())
 char_array = []
 for i in range(N):
     char_array.append(sys.stdin.readline().rstrip())
+char_array = set(char_array)
+char_array = list(char_array)
 char_array.sort(key= lambda x : (len(x),x))
-print(char_array)
+
+for value in char_array:
+    print(value)
