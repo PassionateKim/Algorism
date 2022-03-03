@@ -9,10 +9,9 @@ N = int(input())
 xy_arrays = []
 #1. 값넣기
 for i in range(N):
-    x,y = map(int,sys.stdin.readline().split())
-    xy_arrays.append([y,x])
+    xy_arrays.append(list(map(int,sys.stdin.readline().split())))
 
-xy_arrays.sort()
+xy_arrays.sort(key= lambda x: (x[1],x[0]))
 
-for y,x in xy_arrays:
-    print(x,y)
+for i in xy_arrays:
+    print(i[0],i[1])
