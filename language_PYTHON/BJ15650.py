@@ -12,12 +12,13 @@ N,M = map(int,input().split())
 check_list = [False] * N
 arr = []
 
-def dfs(count):
+def dfs(count,idx):
     #깊이 탐색 완료 시
-    if(count == M and arr == sorted(arr)):
+    if(count == M):
         print(*arr)
+        return
     
-    for i in range(N):
+    for i in range(idx,N):
         #수열이므로 중복은 제거하는 조건
         if(check_list[i]):
             continue
@@ -29,10 +30,10 @@ def dfs(count):
         arr.append(i+1)
         
         #depth 추가
-        dfs(count+1)
+        dfs(count+1,i+1)
 
         #초기화
         check_list[i] = False
         arr.pop()
 
-dfs(0)
+dfs(0,0)
