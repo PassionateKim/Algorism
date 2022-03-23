@@ -1,8 +1,11 @@
 #바이러스
+from collections import deque
+
+
 N = int(input())
 M = int(input())
-#1포함
-count = 1
+
+count = 0
 
 computer_list = [[] for i in range(N+1)]
 visited = [False] *(N+1)
@@ -15,19 +18,27 @@ for i in range(M):
 for i in range(1,N+1):
     computer_list[i].sort()
 
-print(computer_list)
 
-def dfs(idx):
+
+def bfs(idx):
     global count
+    queue = deque([idx])
     
-    for i in computer_list[idx]:
-        if not visited[i]:
-            count += 1
-            visited[i] = True 
-            dfs(i)
+    while queue:
+        
+        v = queue.popleft()
+        for i in computer_list[v]:
+            if not visited[i]:
+                queue.append(i)
+                count += 1
+                visited[i] = True
+
+
+    
+ 
 
 
 
 
-dfs(1)
+bfs(1)
 print(count)
