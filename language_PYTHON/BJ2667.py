@@ -1,51 +1,55 @@
-from sys import stdin
+import sys
+
 n = int(input())
-# 데이터 저장용 공간 matrix
-matrix = [[0]*n for _ in range(n)]
-# 방문 내역 저장용 visited
-visited = [[0]*n for _ in range(n)]
 
-# matrix에 아파트 유무 0과 1 저장
+#그래프 생성하기
+graph = []
 for i in range(n):
-    line = stdin.readline().strip()
-    for j, b in enumerate(line):
-        matrix[i][j] = int(b)
+    graph.append(list(map(int,sys.stdin.readline().rstrip())))
 
-# 방향 확인용 좌표 dx와 dy
-# 중앙을 기준으로 좌/우/위/아래
-dx = [-1, 1, 0, 0]
-dy = [0, 0, -1, 1]
+#들어왔는지 체크
+visited = [[0] *(n) for _ in range(n)]
 
-# DFS 함수 정의
-def dfs(x, y, c,idx):
-    visited[x][y] = 1   # 방문 여부 표시
-    global nums            # 아파트 단지 수를 세기위한 변수
-    # 아파트가 있으면 숫자를 세어줍니다.
-    if matrix[x][y] == 1:
-        matrix[x][y] = c # 아파트 단지별 숫자 표시용
-        nums += 1
-    # 해당 위치에서 좌/우/위/아래 방향의 좌표를 확인해서 dfs 적용
+# for i in visited:
+#     print(i)
+
+#단지 배열
+num = []
+#아파트 수
+count = 0
+#상하좌우
+dx = [0,0,-1,1]
+dy = [-1,1,0,0]
+
+def DFS(x,y):
+    global count
+    count += 1
+    visited[x][y] = 1
+    
     for i in range(4):
         nx = x + dx[i]
-        ny = y + dy[i]
-        if 0 <= nx < n and 0 <= ny < n:
-            if visited[nx][ny] == 0 and matrix[nx][ny] == 1:
-                print(nx,ny,c,idx)
-                # for i in matrix:
-                #     print(i)
-                dfs(nx,ny, c,idx+1)
+        ny = y + dy[i]  
 
-cnt = 1 # 아파트 단지 세기 위한
-numlist = [] # 아파트 단지별 숫자
-nums=0 # 아파트 수
-for a in range(n):
-    for b in range(n):
-        if matrix[a][b] == 1 and visited[a][b] == 0:
-            dfs(a,b,cnt,0)
-            numlist.append(nums)
-            nums = 0
-            cnt += 1 # 아파트 단지 별 표시용
+        if(0 <= nx < n and 0 <= ny < n):
+            if(visited[nx][ny] == 0 and graph[nx][ny] == 1):
+                DFS(nx,ny)
+    
 
-print(len(numlist))
-for n in sorted(numlist):
-    print(n)
+
+
+for i in range(n):
+    for j in range(n):
+        if(visited[i][j] == 0 and graph[i][j] == 1):
+            # print(i,j)
+            DFS(i,j)
+            num.append(count)
+            count = 0
+# for i in visited:
+#     print(i)
+
+num.sort()
+
+print(len(num))
+
+for i in num:
+    print(i)
