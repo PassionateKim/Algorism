@@ -6,7 +6,7 @@
 (프로그래머스 문제의 경우 문제의 이름으로 표기합니다.)
 
 푸는 데에 어려움이 있었거나 배운점이 있는 문제는 개인 기술 블로그에 기록합니다.  
-* 기술 블로그: <http://abcdefgh123123.tistory.com/category/IT> 
+* 기술 블로그: <https://abcdefgh123123.tistory.com/category/IT/%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98> 
 
 <img align='center' src="http://mazassumnida.wtf/api/v2/generate_badge?boj=rereers1125">  
 
