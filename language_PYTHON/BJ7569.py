@@ -41,18 +41,27 @@ def BFS():
     while ripen_tomato_queue:
         x, y = ripen_tomato_queue.popleft()
 
+        floor = x//N 
+
         for i in range(6):
             nx = x + dx[i]
             ny = y + dy[i]
             
-
             if(0 <= nx < N*H and 0 <= ny < M):
-                if (tomato_grah[nx][ny] == 0):
+                if (tomato_grah[nx][ny] == 0 and nx//N == floor):
                     ripen_tomato_queue.append([nx,ny])
                     tomato_grah[nx][ny] = tomato_grah[x][y] + 1
-                    for i in tomato_grah:
-                        print(i)
-                    print("------")
+                    
+                elif(tomato_grah[nx][ny] == 0):
+                    if(i == 4 or i == 5):
+                        ripen_tomato_queue.append([nx,ny])
+                        tomato_grah[nx][ny] = tomato_grah[x][y] + 1
+
+
+                
+        # for i in tomato_grah:
+        #     print(i)
+        # print("-----")
     #토마토밭 출력
     # for i in tomato_grah:
     #     print(i)
