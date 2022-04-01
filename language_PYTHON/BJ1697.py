@@ -2,30 +2,28 @@
 
 from collections import deque
 
-
 N,K = map(int,input().split())
+dist = [0]*100001
+print(dist)
 
 def DFS():
-    if(N == K):
-        print(0)
-        return
     queue = deque()
-    queue.append([N,0])
+    queue.append(N)
 
     while queue:
-        a,b = queue.popleft()
-       
-        # print(a,b,queue)
-        if(2*a == K or a-1 == K or a+1 == K):
-            print(b+1)
+        x = queue.popleft()
+        if(dist[x] == K):
+            print(x)
             return
-        if(a != 0):
-            if([a-1,b+1] not in queue):
-                queue.append([a-1,b+1])
-            if([2*a,b+1] not in queue):
-                queue.append([2*a,b+1])
-        if([a+1,b+1] not in queue):
-            queue.append([a+1,b+1])
+        
+        for i in (x-1,x+1,x*2):
+            if(dist[i] == 0 and 0<=i<=100000):
+                dist[i] = dist[x] + 1
+                queue.append(i)
+    
 
 
+    
+
+ 
 DFS()
