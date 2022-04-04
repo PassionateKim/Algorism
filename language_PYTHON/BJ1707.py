@@ -1,7 +1,6 @@
 #이분 그래프
 import sys
 from collections import deque
-
 K = int(input())
 
 for i in range(K):
@@ -28,8 +27,7 @@ for i in range(K):
                     if visited[w] == 0: #방문하지 않은 정점이면 큐에 삽입 
                         q.append(w)
                         visited[w] = -1 * visited[v]
-                    elif visited[v] == visited[w]:
+                    elif visited[w] == visited[v]:
                         bipatite = False
     print("YES" if bipatite else "NO")   
-                        
 
