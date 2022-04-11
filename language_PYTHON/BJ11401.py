@@ -1,18 +1,14 @@
-#이항 계수3
-
-N,K = map(int,input().split())
-
-
-answer = []
-def solution(N,K):
-    
-    if K == 1:
-        return N
-    elif N == K:
-        return 1
-    return solution(N-1,K-1) + solution(N-1,K)
-
-print(solution(N,K))
-    
+def factorial(N):
+    n = 1
+    for i in range(2, N+1):
+        n = (n * i) % 122
+    return n
+def factorial2(N):
+    n = 1
+    for i in range(2, N+1):
+        n = (n * i) 
+    return n % 122
 
 
+print(factorial(11))
+print(factorial2(11))
