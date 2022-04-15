@@ -1,6 +1,5 @@
 #피보나치 수 6
 import sys
-sys.setrecursionlimit(10**6)
 n = int(input())
 p = 1000000007
 
@@ -17,7 +16,7 @@ def multi(m1,m2):
 def recursive(matrix,n):
     if n == 1:
         return matrix
-    elif n // 2 == 0:
+    elif n % 2 == 0:
         matrix = recursive(matrix, n//2)
         return multi(matrix, matrix)
     else:
@@ -27,4 +26,4 @@ def recursive(matrix,n):
 initial_matrix = [[1,1],[1,0]]
 result_matrix = recursive(initial_matrix,n)
 
-print(result_matrix[0][1])
+print(result_matrix[0][1] % p)
