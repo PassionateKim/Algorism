@@ -12,12 +12,10 @@ for _ in range(N):
         if len(heap) == 0:
             print(0)
         else:
-            print(heapq.heappop(heap)[1])
-    
-    
+            print(-heapq.heappop(heap)[1])
     else:
         if a < 0:
-            heapq.heappush(heap,(-a,a))
+            heapq.heappush(heap,(-a,-a))
         else:
-            heapq.heappush(heap,(a,a))
+            heapq.heappush(heap,(a,-a))
             
