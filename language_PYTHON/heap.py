@@ -2,13 +2,12 @@ import sys
 
 #힙 구현
 def heapify(array):
-    for i in range(len(array)//2 - 1,-1,-1):
+    for i in range(len(array)//2 -1,-1,-1):
         parent = i
-        while parent < len(array) // 2:
-            #print("parent",parent)
-            child = parent * 2 + 1
 
-            if child + 1 < len(array) and array[child + 1] > array[child]:
+        while parent <= len(array) // 2:
+            child = parent * 2 + 1
+            if child + 1 < len(array) and array[child] < array[child + 1]:
                 child += 1
 
             if array[parent] < array[child]:
@@ -16,7 +15,27 @@ def heapify(array):
                 array[child] = array[parent]
                 array[parent] = tmp
             parent = child
-            #print(array)
+            print(array) 
+
+    
+    # #자식이 있는 부모 노드만 체크하는 것이므로 len(array) // 2 로 시작한다.
+    # for i in range(len(array)//2 - 1,-1,-1):
+    #     parent = i
+    #     #자식이 있을 조건
+    #     while parent < len(array) // 2:
+    #         print("parent index",parent)
+    #         child = parent * 2 + 1
+    #         print("child index", child)
+    #         #값이 큰 자식을 기준으로 하기 위한 if문 -> 이해 안되면 반대를 생각해보기
+    #         if child + 1 < len(array) and array[child + 1] > array[child]:
+    #             child += 1
+    #         #자식노드와 비교
+    #         if array[parent] < array[child]:
+    #             tmp = array[child]
+    #             array[child] = array[parent]
+    #             array[parent] = tmp
+    #         parent = child
+    #         print(array)
 
 def heappop(array):
     if not array:
@@ -60,13 +79,15 @@ def heappush(array,value):
 
 input = sys.stdin.readline
 
-n = int(input())
+# n = int(input())
 
-array = []
+array = [1,2,3,4,5,6,7,8,9,10]
 
-for i in range(n):
-    order = int(input())
-    if order == 0:
-        print(heappop(array))
-    else:
-        heappush(array,order)
+heapify(array)
+
+# for i in range(n):
+#     order = int(input())
+#     if order == 0:
+#         print(heappop(array))
+#     else:
+#         heappush(array,order)
