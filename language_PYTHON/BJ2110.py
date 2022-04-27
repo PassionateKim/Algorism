@@ -1,5 +1,4 @@
 # 공유기 설치
-from array import array
 import sys
 N,C = map(int,input().split())
 answer = 0
@@ -9,27 +8,28 @@ for i in range(N):
 
 #정렬하기 for 이분 탐색
 location_list = sorted(location_list)
-
+answer = 0
 def Binary(start, end):
-    print(start, end, (start+end) // 2)
     global answer
-    if start > end:
-        return
-    count = 1 
-    mid = (start + end) // 2
-    current = location_list[0]
+    while start <= end:
+        count = 1
+        current = location_list[0]
+        mid = (start + end) // 2
+        
+        print(start, end, mid)
+        for i in range(1, len(location_list)):
+            # 체크하기
+            if location_list[i] - current >= mid:
+                count += 1
+                current = location_list[i]
+            
+        if count < C: #count가 작으면 범위를 줄여야함 
+            end = mid - 1
+        else:
+            start = mid + 1
+            answer = mid
 
-    for i in range(1,len(location_list)):
-        if location_list[i] - current >= mid:
-            count += 1
-            current = location_list[i]
-    print(count)
-    if count <= C: # 개수가 적으면 값을 줄여야 하므로
-        return Binary(start, mid -1)
-    else:
-        answer = mid 
-        return Binary(mid+1, end)
-     
 
+ 
 Binary(1, location_list[-1] - location_list[0])
 print(answer)
