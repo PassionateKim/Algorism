@@ -16,7 +16,4 @@ def Binary(start, end):
         else: # 키워야 하므로
             start = mid + 1 
     return start
-print(Binary(1, 10**9))
-
-
-        
+print(Binary(1, 10** 9))
