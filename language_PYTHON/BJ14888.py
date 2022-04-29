@@ -1,40 +1,32 @@
 #연산자 끼워넣기
-#+ - x ÷
 N = int(input())
-A_array = list(map(int,input().split()))
-arithmetic_operations = list(map(int,input().split()))
-answer = []
+A_array = list(map(int, input().split()))
+calculation = list(map(int, input().split()))
+answer = [-10**9-1, 10**9+1]
 
-count = 0
-def dfs(idx,sum,add,minus,multi,div):
-    global count
-    if(idx == N-1):
-        answer.append(sum)
-        return
-    
-    if(add):
-        dfs(idx+1,sum+A_array[idx+1],add-1,minus,multi,div)
-    
-    if(minus):
-        #계속 값이 이상했던 이유 -> minus에 minus-1 치환을 안해줬었음 실수 유형체크
-        dfs(idx+1,sum-A_array[idx+1],add,minus-1,multi,div)
-    
-    if(multi):
-        dfs(idx+1,sum*A_array[idx+1],add,minus,multi-1,div)
-    
-    if(div):
-        #음수를 양수로 나눌 때는 C++14의 기준을 따른다.양수로 바꾼 뒤 몫을 취하고, 그 몫을 음수로 바꾼 것과 같다.
-        if(sum < 0):
-            sum = abs(sum)
-            sum = sum // A_array[idx+1]
-            sum = -sum
+def DFS(sum, plus, minus, multi, div, depth):
+    print(sum, plus, minus, multi, div, depth)
+    # 탈출조건
+    if depth == len(A_array) - 1:
+        if answer[0] < sum:
+            answer[0] = sum
+
+        if answer[1] > sum:
+            answer[1] = sum 
+        return   
+    if plus:
+        DFS(sum + A_array[depth+1], plus-1, minus, multi, div, depth+1)
+    if minus:
+        DFS(sum-A_array[depth+1], plus, minus-1, multi, div, depth+1)
+    if multi:
+        DFS(sum*A_array[depth+1], plus, minus, multi-1, div, depth+1)
+    if div:
+        if sum < 0:
+            DFS(-(-sum//A_array[depth+1]), plus, minus, multi, div-1, depth+1)            
         else:
-            sum = sum // A_array[idx+1]
-        dfs(idx+1,sum,add,minus,multi,div-1)
+            DFS(sum//A_array[depth+1], plus, minus, multi, div-1, depth+1)
 
-
-    
-dfs(0,A_array[0],arithmetic_operations[0],arithmetic_operations[1],arithmetic_operations[2],arithmetic_operations[3])
-
-print(max(answer))
-print(min(answer))
+# 덧셈, 뺼셈, 곱셈, 나눗셈
+DFS(A_array[0], calculation[0], calculation[1], calculation[2], calculation[3], 0)
+print(answer[0])
+print(answer[1])
