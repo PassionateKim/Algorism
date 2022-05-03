@@ -1,14 +1,17 @@
 import sys
-st1 = list(sys.stdin.readline().rstrip())
+st1 = list(map(str, sys.stdin.readline().rstrip()))
 st2 = []
 
-for _ in range(int(sys.stdin.readline())):
-    command = list(sys.stdin.readline().split())
+# st1을 커서의 왼쪽
+# st2을 커서의 오른쪽이라고 생각하기
+N = int(input())
+for _ in range(N):
+    command = list(map(str, sys.stdin.readline().rstrip().split()))
 
     if command[0] == 'L':
         if st1:
             st2.append(st1.pop())
-    
+
     elif command[0] == 'D':
         if st2:
             st1.append(st2.pop())
@@ -17,12 +20,14 @@ for _ in range(int(sys.stdin.readline())):
         if st1:
             st1.pop()
     
-    else: #P 
+    else:
         st1.append(command[1])
-    
 
 st1.extend(reversed(st2))
 print(''.join(st1))
+
+
+
 
 
 
