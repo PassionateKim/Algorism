@@ -1,26 +1,30 @@
 # 로또
-from itertools import combinations
+
+
+
 
 def dfs(start, depth):
     if depth == 6:
         for i in range(6):
-            print(combi[i], end=' ')
+            print(answer[i], end=' ')
         print()
         return
     
-    for i in range(start, len(set_S)):
-        combi[depth] = set_S[i]
-        dfs(i + 1, depth + 1)
 
-combi = [0 for i in range(13)]
+    for i in range(start, len(set_s)):
+        answer[depth] = set_s[i]
+        
+        dfs(i+1, depth+1)
+
 
 while True:
-    # 입력
-    set_S = list(map(int, input().split()))
-    
-    if set_S[0] == 0:
-        break
+    set_s = list(map(int, input().split()))
+    answer = [0 for _ in range(13)]
 
-    del set_S[0]
+    if set_s[0] == 0:
+        break
+    del set_s[0]
+
     dfs(0,0)
     print()
+
