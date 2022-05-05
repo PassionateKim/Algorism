@@ -3,41 +3,34 @@
 # #N이 주어졌을 때, 퀸을 놓는 방법의 수를 구하는 프로그램을 작성하시오.
 import sys
 
-N = int(input())
-cnt = 0
-graph = [[0] * N for _ in range(N)] 
+n = int(sys.stdin.readline().rstrip())
+ans = 0
+row = [0] * n
 
+def isPromising(x):
+    # x = depth
+    for i in range(x):
+        if row[i] == row[x] or (abs(i - x) == abs(row[i] - row[x])):
+            return False
 
-
-def isPromising(depth,y):
-    for i in range(depth):
-        for j in range(N):
-            if graph[i][j] == 1:
-                if j == y or (abs(depth - i) == abs(j - y)):
-                    graph[depth][y] = 0 # 초기화
-                    return False
     return True
 
 def dfs(depth):
-    global graph
-    global cnt
-    if depth == N:
-        cnt += 1
-        graph = [[0] * N for _ in range(N)] # 초기화
+    global ans
+    if depth == n:
+        ans += 1
         return
-    else:# 값을 저장해서 풀어야됨. -> 어떻게 solve 할까?????
-        for y in range(N):
-            
-            graph[depth][y] = 1 # 미리 참조?? 왜죠??
 
-            if isPromising(depth,y):
-                dfs(depth+1)
- 
+    for i in range(n):
+        row[depth] = i
+
+        if isPromising(depth):
+            dfs(depth+1)
+
 dfs(0)
-print(cnt)
+print(ans)
 
 
-# n = int(sys.stdin.readline().rstrip())
 
 # ans = 0
 # row = [0] * n
