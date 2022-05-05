@@ -1,55 +1,52 @@
 import sys
+from collections import deque
 
-n = int(input())
+N = int(input())
+graph = [list(map(int, sys.stdin.readline().rstrip())) for _ in range(N)]
+visited =[[0] * N for _ in range(N)]
 
-#그래프 생성하기
-graph = []
-for i in range(n):
-    graph.append(list(map(int,sys.stdin.readline().rstrip())))
+# 상하좌우
+dx = [-1,1,0,0]
+dy = [0,0,-1,1]
 
-#들어왔는지 체크
-visited = [[0] *(n) for _ in range(n)]
+answer_list = [] # 최종 정답
+cnt = 1 # 단지번호 및 개수
+answer = 0 # 단지 당 개수
 
-# for i in visited:
-#     print(i)
+def bfs(x, y):
+    global cnt
+    global answer 
 
-#단지 배열
-num = []
-#아파트 수
-count = 0
-#상하좌우
-dx = [0,0,-1,1]
-dy = [-1,1,0,0]
+    q = deque()
+    q.append([x,y])
+    visited[x][y] = cnt # 방문처리
+    answer += 1 # 추가
 
-def DFS(x,y):
-    global count
-    count += 1
-    visited[x][y] = 1
+    while q:
+        x,y = q.popleft()
+        for i in range(4):
+            nx = x + dx[i]
+            ny = y + dy[i]
+            if (0 <= nx < N and 0 <= ny < N): # 그래프 내
+                if graph[nx][ny] == 1 and visited[nx][ny] == 0:
+                    q.append([nx,ny])
+                    visited[nx][ny] = 1 # 방문처리
+                    answer += 1 # 추가
+
     
-    for i in range(4):
-        nx = x + dx[i]
-        ny = y + dy[i]  
-
-        if(0 <= nx < n and 0 <= ny < n):
-            if(visited[nx][ny] == 0 and graph[nx][ny] == 1):
-                DFS(nx,ny)
+    
     
 
 
-
-for i in range(n):
-    for j in range(n):
-        if(visited[i][j] == 0 and graph[i][j] == 1):
-            # print(i,j)
-            DFS(i,j)
-            num.append(count)
-            count = 0
-# for i in visited:
-#     print(i)
-
-num.sort()
-
-print(len(num))
-
-for i in num:
+for i in range(N):
+    for j in range(N):
+        if graph[i][j] == 1 and visited[i][j] == 0: # 아파트 단지 && 방문 X
+            bfs(i, j)
+            cnt += 1
+            answer_list.append(answer)
+            answer = 0
+      
+print(len(answer_list))
+answer_list.sort() # 오름차순으로 정리하시오
+for i in answer_list:
     print(i)
