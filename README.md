@@ -14,6 +14,8 @@
 :books: 백준 문제집: 단계별로 풀어보기  
 [https://www.acmicpc.net/step](https://www.acmicpc.net/step)
 
+:books:BOJ 길라잡이(Beta)  
+https://ryute.tistory.com/m/33
 ## 공부 기간  
 2021년 3월 1일 ~
 
