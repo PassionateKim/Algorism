@@ -1,7 +1,7 @@
 # 숫자 문자열과영단어
 def solution(s):
     answer = s
-    if answer.isdigit():
+    if answer.isdigit(): #all 숫자인 경우
         pass
     else: # all 숫자가 아닌 경우
         if "zero" in answer:
@@ -24,12 +24,5 @@ def solution(s):
             answer = answer.replace("eight", "8")
         if "nine" in answer:
             answer = answer.replace("nine", "9")
-        
-        
-
-
-        
 
     return int(answer)
-
-print(solution("one4seveneight"))
