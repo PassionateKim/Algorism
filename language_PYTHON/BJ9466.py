@@ -1,63 +1,43 @@
 # 텀 프로젝트
 import sys
 input = sys.stdin.readline
-sys.setrecursionlimit(10**6)
-# dfs 풀이
-
-def dfs(x):
-    global cycle
-    
-    visited[x] = 1 # 방문처리
-    temp_cycle.append(x)
-    num = arr[x]
-
-    if visited[num] == 1:
-        if num in temp_cycle:
-            cycle += temp_cycle[temp_cycle.index(num):]
-        return
-    else:
-        dfs(num)
-
 
 T = int(input().rstrip())
+
+def dfs(start):
+    global cycle
+    visited[start] = 1 # 방문처리 
+    temp_cycle.append(start) # 팀원이 될 가능성이 있는 아이들
+    end = student_list[start] # 선택당한 친구
+
+    if end in temp_cycle: # cycle을 만드는지 체크
+        if end not in cycle:
+            cycle += temp_cycle[temp_cycle.index(end):]
+        return
+    else:
+        dfs(end)
+
+
 for i in range(T):
     N = int(input().rstrip())
-    arr = [0] + list(map(int, input().split()))
+    student_list =[0] + list(map(int, input().split()))
     visited = [0] * (N+1)
     cycle = []
-
-    for i in range(1, N+1):
-        if visited[i] == 0: 
-            temp_cycle = []
-            dfs(i)
     
-    print(N - len(cycle))
+    for i in range(1, len(student_list)):
+        temp_cycle = []
+        if visited[i] == 0: # 방문하지 않은 node라면 
+            dfs(i)
+    print(len(student_list)-1 - len(cycle))
 
 
 
 
 
-# 풀이 2
-# T = int(input().rstrip())
-# for _ in range(T):
-#     N = int(input().rstrip())
-#     p = [0] + list(map(int, input().split()))
-#     team = [0] * (N+1)
 
-#     for i in range(1, N+1):
-#         if team[i] == 0: # 팀이 없는 경우
-#             team_number = i
-#             # 팀 구성한다고 가정하기
-#             while team[i] == 0:
-#                 team[i] = team_number # 내 풀이와의 차이 1이 아니라 team_num
-#                 i = p[i]
-#             # 역순으로 순환하며 사이클 확인
-#             while team[i] == team_number:
-#                 team[i] = -1
-#                 i = p[i]
-#     result = N - team.count(-1)
-#     print(result)
- 
+
+
+
 
 
 
@@ -91,3 +71,8 @@ for i in range(T):
     
 #     print((len(student_list)-1) - len(student_who_has_team)) # 편의를 위해 임의로 len을 1늘렸었으므로, 다시 뺴줌
 
+# 틀린 이유
+# 1. 문제를 잘못읽음
+# 알아둘것
+# 1. index 활용하기
+# 2. dfs설계 방식
