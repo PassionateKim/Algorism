@@ -37,12 +37,7 @@ def bfs(idx):
                                 # visited[nx][ny] = 1 #방문처리
     return cnt                            
 
-
-
-
-
-
-for i in range(2, max_val):
+for i in range(1, max_val+1):
     cnt = bfs(i)
     # print(cnt)
     answer = max(cnt, answer)
