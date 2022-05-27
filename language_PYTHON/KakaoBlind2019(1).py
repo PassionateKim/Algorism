@@ -10,11 +10,13 @@ def solution(record):
         command = i.split()[0]
         if command == "Leave":
             id = i.split()[1]
-            # nickName_dict[id] = nickName // 이 땐 바뀌지 않는다. 
+            command_dict[id].append(command)
+            # nickName_dict[id] = nickName
         else:
             id, nickName = i.split()[1], i.split()[2]
             command_dict[id].append(command)
             nickName_dict[id] = nickName
+        
         
     print(command_dict)
     print(nickName_dict)
