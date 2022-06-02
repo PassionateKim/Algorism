@@ -2,27 +2,32 @@
 import sys
 input = sys.stdin.readline
 
-n = int(input())
-N = sorted(list(map(int,input().split())))
-m = int(input())
-M = list(map(int, input().split()))
+N = int(input())
+A_array = list(map(int, input().split()))
+M = int(input())
+B_array = list(map(int, input().split()))
 
-def binary(l, N, start, end):
-    if start > end:
-        return 0
-    m = (start + end) // 2
-    if l == N[m]:
-        return 1
-    elif l < N[m]:
-        return binary(l, N, start, m-1)
-    else: #l > N[m]
-        return binary(l, N, m+1, end)
+# 이분탐색을 위해서는 반드시 정렬이 필요하다.
+A_array.sort()
+
+def Binary(start, end, target):
+    while start <= end:
+        mid = (start + end) // 2
+        # 이분 탐색 탈출 조건
+        if A_array[mid] == target:
+            print(1)
+            return
+        
+        # 이분 탐색 비즈니스 로직
+        if A_array[mid] < target:
+            start = mid + 1
+        else:
+            end = mid - 1
+    print(0)
+    return
 
 
+for item_B in B_array:
+    Binary(0, len(A_array)-1, item_B)
 
 
-
-for l in M:
-    start = 0 #index의 시작
-    end = len(N) - 1 #indext의 끝
-    print(binary(l, N, start, end))
