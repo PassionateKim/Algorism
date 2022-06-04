@@ -6,16 +6,14 @@
 (프로그래머스 문제의 경우 문제의 이름으로 표기합니다.)
 
 푸는 데에 어려움이 있었거나 배운점이 있는 문제는 개인 기술 블로그에 기록합니다.  
-* 기술 블로그: <https://abcdefgh123123.tistory.com/category/IT/%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98> 
+* [기술 블로그 알고리즘](https://abcdefgh123123.tistory.com/category/IT/%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98) 
 
 <img align='center' src="http://mazassumnida.wtf/api/v2/generate_badge?boj=rereers1125">  
 
 ## Link
-:books: 백준 문제집: 단계별로 풀어보기  
-[https://www.acmicpc.net/step](https://www.acmicpc.net/step)
+:books: 백준 문제집: [https://www.acmicpc.net/step](https://www.acmicpc.net/step)</br>
+기간: 2021년 3월 ~ 현재 복습중
 
-:books:BOJ 길라잡이(Beta)  
-https://ryute.tistory.com/m/33
-## 공부 기간  
-2021년 3월 1일 ~
+:books:BOJ 길라잡이(Beta) : [https://ryute.tistory.com/m/33](https://ryute.tistory.com/m/33)</br> 
+기간: 2022년 4월 ~ 
 
