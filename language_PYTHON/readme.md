@@ -1,10 +1,27 @@
 ## 파이썬 알고리즘 공부
--------
-* exam
-    * 1.helloWorld
-        * 2.world
- [![Gmail Badge](https://img.shields.io/badge/Gmail-d14836?style=flat-square&logo=Gmail&logoColor=white&link=mailto:snugyun01@gmail.com)](mailto:snugyun01@gmail.com)
-![Anurag's github stats](https://github-readme-stats.vercel.app/api?username=PassionateKim)
 
+### 커밋 form
+복습횟수: *, 푸는데 걸린 시간, 복습필요여부 O/X </br>
 
-:eggplant::eggplant::eggplant::eggplant:
+### 복습 기준
+다음날 직후 복습은 복습횟수에서 제외한다.</br>
+코딩테스트 일주일 전부터는 복습위주로 공부한다.</br>
+
+### 복습 우선순위
+1. 과거 시간순
+2. 푸는데 걸린 시간 많은 순</br>
+
+### 복습 제외 기준</br>
+1. 복습필요여부 X and 푸는데 걸린 시간 20분 이내 -> 복습하지 않는다. 
+
+## 코테 취약부분
+
+* 알고리즘 출제 우선순위를 기준으로 공부
+* ![image](https://user-images.githubusercontent.com/88755733/172157655-9f0c4c7a-6636-441b-b814-a7f62387995f.png)
+
+* DFS/BFS: 활용문제를 구현하는데에 어려움을 느낀다.
+* 시뮬레이션: 시간이 많이 걸린다. 어려움을 느낀다.
+* 그리디: 감으로 푼다.
+* 자료구조: 취약하다. 기출문제를 보면 생각보다 많이 출제되니 공부해야 한다.
+* 이진 탐색: 취약하다. 그러나 우선순위가 아니다.
+* 투포인터: 취약하다. 그러나 우선순위가 아니다.
