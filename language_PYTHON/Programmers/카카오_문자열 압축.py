@@ -2,9 +2,8 @@
 # 압축 최대 lengh의 반
 # 빼고 뺸 게 작으면 break 
 def solution(s):
-    answer = 0
-    min_num = 10**5 + 1
-    for i in range(0, len(s)//2+1):
+    min_num = len(s)
+    for i in range(1, len(s)//2+1):
         cnt = 1
         left_line, right_line, tmp = s[:i], s[i:], ""
         while True:
@@ -29,9 +28,7 @@ def solution(s):
             tmp += left_line + right_line
 
         min_num = min(len(tmp), min_num)
-    # s 가 1 일 땐 for문이 안돌아가므로
-    if len(s) == 1:
-        min_num = 1
+    
     return min_num
 
 

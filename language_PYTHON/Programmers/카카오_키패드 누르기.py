@@ -42,8 +42,7 @@ def solution(numbers, hand):
                     result.append('R')
                     right_hand = str(num)
     a = "".join(result)
-    print(a)
-    return
+    return a
 
 solution([1, 3, 4, 5, 8, 2, 1, 4, 5, 9, 5], "right")
       

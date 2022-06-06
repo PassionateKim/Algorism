@@ -24,8 +24,7 @@ def solution(new_id):
                 check += string
         else:
             check += string
-    print(check)
-    
+    answer = check
     # 4단계
     if answer[0] == ".":
         answer = answer[1:]
