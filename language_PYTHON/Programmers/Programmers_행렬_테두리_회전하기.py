@@ -1,64 +1,73 @@
-# 행렬 테두리 회전하기
+
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
 def solution(rows, columns, queries):
     answer = []
-    matrix = [[0 for i in range(columns+1)] for j in range(rows+1)]
-    num = 1
-    for row in range(1, rows+1):
-        for column in range(1, columns+1):
-            matrix[row][column] = num
-            num += 1
-    
-    for x1, y1, x2, y2 in queries:
-        tmp = matrix[x1][y1]
-        mini = tmp
 
-        for k in range(x1, x2):
-            test = matrix[k+1][y1]
-            matrix[k][y1] = test
-            mini = min(mini, test)
+    board = [[i+(j)*columns for i in range(1,columns+1)] for j in range(rows)]
+    # print(board)
 
-        for k in range(y1, y2):
-            test = matrix[x2][k+1]
-            matrix[x2][k] = test
-            mini = min(mini, test)
-        
-        for k in range(x2,x1,-1):
-            test = matrix[k-1][y2]
-            matrix[k][y2] = test
-            mini = min(mini, test)
-        
-        for k in range(y2,y1,-1):
-            test = matrix[x1][k-1]
-            matrix[x1][k] = test
-            mini = min(mini, test)
-
-        matrix[x1][y1+1] = tmp
-
-    # graph = [list(i * columns + j for j in range(1, columns+1)) for i in range(rows)]
-    # for i in range(len(queries)):
-    #     tmp_list = []
-    #     x1, y1, x2, y2 = queries[i][0]-1, queries[i][1]-1, queries[i][2]-1, queries[i][3]-1
-       
-       
-    #     # 직사각형 위 가로 
-    #     for i in range(y1, y2+1):
-    #         tmp_list.append(graph[x1][i])
-    #     # 직사각형 오른쪽 세로
-    #     for i in range(x1+1, x2):
-    #         tmp_list.append(graph[i][y2])
-    #     # 직사각형 아래 가로 
-    #     for i in range(y2, y1-1, -1):
-    #         tmp_list.append(graph[x2][i])
-    #     # 직사각형 왼쪽 세로
-    #     for i in range(x2-1, x1, -1):
-    #         tmp_list.append(graph[i][y1])
-    #     print(tmp_list)    
-    #     answer.append(min(tmp_list))
+    for a,b,c,d in queries:
+        stack = []
+        r1, c1, r2, c2 = a-1, b-1, c-1, d-1
 
 
-               
-        
+        for i in range(c1, c2+1):
+
+            stack.append(board[r1][i])
+            if len(stack) == 1:
+                continue
+            else:
+                board[r1][i] = stack[-2]
+
+
+        for j in range(r1+1, r2+1):
+            stack.append(board[j][i])
+            board[j][i] = stack[-2]
+
+        for k in range(c2-1, c1-1, -1):
+            stack.append(board[j][k])
+            board[j][k] = stack[-2]
+
+        for l in range(r2-1, r1-1, -1):
+            stack.append(board[l][k])
+            board[l][k] = stack[-2]
+
+        answer.append(min(stack))
 
     return answer
 
-solution(6,6,[[2,2,5,4]])
+solution(6,6,[[2,2,5,4],[3,3,6,6],[5,1,6,3]])
