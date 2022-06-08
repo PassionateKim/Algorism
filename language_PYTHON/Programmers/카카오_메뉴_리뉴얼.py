@@ -1,32 +1,25 @@
 # 메뉴 리뉴얼
-from collections import defaultdict
 from itertools import combinations
-
+from collections import Counter
 def solution(orders, course):
     answer = []
-
-    for menu_cnt in course: 
-        candidates = []
-        tmp_combi_dict = defaultdict(int)
-        
+    for c in course:
+        order_combi = []
         for order in orders:
-            order_list = list(''.join(order))
-            for li in combinations(order_list, menu_cnt):
-                res = ''.join(sorted(li))
-                if res not in candidates:
-                    candidates.append(res)
-                else:
-                    if res not in tmp_combi_dict.keys():
-                        tmp_combi_dict[res] = 2
-                    else:
-                        tmp_combi_dict[res] += 1
-                
-        # 가장 많이 주문 된 경우
-        if tmp_combi_dict:
-            maxi = max(tmp_combi_dict.values())
-            for key, value in tmp_combi_dict.items():
-                if value == maxi:
-                    answer.append(key)
+            for combi in combinations(order, c):
+                order_combi.append(''.join(sorted(combi)))
+        # ['AB', 'AC', 'AD', 'AE', 'BC', 'BD', 'BE', 'CD']
+        order_count = Counter(order_combi).most_common()
+        maxi = -1
+        for oc in order_count:
+            maxi = max(maxi, oc[1])
+        for oc in order_count:
+            if oc[1] == maxi and maxi != 1:
+                answer.append(oc[0])
     answer.sort()
+    print(answer)
     return answer
-solution(["XYZ", "XWY", "WXA"], [2,3,4])
+solution(["ABCFG", "AC", "CDE", "ACDE", "BCFG", "ACDEH"], [2,3,4])
+
+# set.add
+# set, dict 는 in 체크할때 해쉬를 사용해 O(1)
