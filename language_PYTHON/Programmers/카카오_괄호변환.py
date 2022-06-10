@@ -1,66 +1,63 @@
 # 괄호변환
 from collections import deque
-# 올바른 문자열인지 체크하는 함수
-def isCorrect(chars): 
-    chars = deque(chars)
-    tmp = []
-    tmp.append(chars.popleft())
 
-    if tmp[-1] == ")":
-        return False
-    while chars:
-        a = chars.popleft()
-        if a == '(':
-            tmp.append(a)
-        else:
-            if len(tmp) == 0:
-                return False
-            else:
-                tmp.pop()
-    if tmp:
-        return False
+def isCorrect(chars):
+    count = 0
+    for i in chars:
+        if i == '(':
+            count += 1
+        else: # ')'
+            count -= 1
+        
+        if count < 0:
+            return False
     return True
 
+def isBalancedString(str):
+    return str.count('(') == str.count(')')
+
+def splitUV(str):
+    u, v = str, ""
+    for i in range(2, len(str), 2):
+        if isBalancedString(str[:i]):
+            u = str[:i]
+            v = str[i:]
+            break
+    return u, v
+
 def method(chars):
-    global answer
-
-    # 1입력이 빈 문자열인 경우, 빈 문자열을 반환합니다.
-    if len(chars) == 0:
+    # 1 입력이 빈 문자열인 경우, 빈 문자열을 반환합니다. 
+    if chars == '':
         return ''
-    if isCorrect(chars): # 올바른 문자열이면 그대로 return
-        answer += "".join(chars)
-        return chars
 
-    chars = list(chars)
-    
-    # 2
-    u = []
-    for i in range(len(chars)):
-        u.append(chars.pop(0))
-        if u and u.count("(") == u.count(")"): # 균형잡힌 문자열
-            if isCorrect(u):
-                answer += "".join(u)
-                method(chars)
+    # 2 균형잡힌 괄호 문자열 u, v로 분리합니다.
+    u, v = splitUV(chars)
+
+    if isCorrect(u): #올바른 문자열 이라면
+        # 문자열 v에 대해 1단계부터 다시 수행합니다.
+        u += method(v)
+        return u
+    else:
+        newStr = '('
+        newStr += method(v)
+        newStr += ')'
+        # 나머지 문자열의 괄호 방향을 뒤집어서 뒤에 붙입니다. 
+        answer = ""
+        for s in u:
+            if s == '(':
+                answer += ')'
             else:
-                answer += "("  
-                method(chars) 
-                answer += ")"
-                u.pop(0)
-                u.pop()
-                print(u)
-                for i in range(len(u)):
-                    if u[i] == '(':
-                        u[i] = ')'
-                    else:
-                        u[i] = '('
-                answer += "".join(u)
-            break 
-    
-answer = ''
-def solution(p):
-    global answer
-    method(p)
-    print(answer)
-    return answer
+                answer += '('
 
-solution("))(()((((()))()))")
+        newStr += answer[1:-1]
+        return newStr
+
+def solution(p):
+    if isCorrect(p):
+        return p
+    
+    return method(p)
+
+print(solution("()))((()"))
+
+# reverse != 나머지 문자열의 괄호 방향을 뒤집어서 뒤에 붙입니다.
