@@ -1,25 +1,29 @@
-# 숫자 카드 2
 import sys
-from collections import defaultdict
-input = sys.stdin.readline
-cards_dict = defaultdict(int)
+si = sys.stdin.readline
+n = int(si())
+a = sorted(list(map(int, si().split())))
 
-N = int(input())
-N_cards = list(map(int, input().split()))
-N_cards.sort()
+def lower_bound(a, l, r, x):
+    res = r + 1
+    while l <= r:
+        mid = (l + r) // 2
+        if a[mid] >= x:
+            res = mid
+            r = mid - 1
+        else: l = mid + 1
+    return res
 
-for i in range(len(N_cards)): 
-    if N_cards[i] not in cards_dict:
-        cards_dict[N_cards[i]] = 1 # 초기화
-    else:
-        cards_dict[N_cards[i]] += 1 
-
-M = int(input())
-M_cards = list(map(int, input().split()))
-
-
-for card in M_cards:
-    if card in cards_dict.keys():
-        print(cards_dict[card], end=" ")
-    else:
-        print(0, end=" ")
+def upper_bound(a, l, r, x):
+    res = r + 1
+    while l <= r:
+        mid = (l + r) // 2
+        if a[mid] > x:
+            res = mid
+            r = mid - 1
+        else: l = mid + 1
+    return res
+print(a)
+m = int(si())
+b = list(map(int, si().split()))
+for x in b:
+    print(upper_bound(a, 0, n - 1, x) - lower_bound(a, 0, n - 1, x), end=' ')
