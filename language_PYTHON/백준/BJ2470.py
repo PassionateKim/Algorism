@@ -2,27 +2,30 @@ import sys
 si = sys.stdin.readline
 n = int(si())
 a = sorted(list(map(int, si().split())))
-# 보다 abs 크거나 같은 수 중 가장 작은 수
-def lower_bound(a, l, r, x):
-    res = r
-    while l <= r:
-        mid = (l + r) // 2
-        if a[mid] >= x:
+
+best_sum = 1<<32
+
+def lower_bound(array, start, end, target): 
+    res = end
+    while start<=end:
+        mid = (start + end) // 2
+        if array[mid] >= target:
             res = mid
-            r = mid - 1
-        else: l = mid + 1
+            end = mid - 1
+        else:
+            start = mid + 1 
     return res
 
-best_sum = 1 << 31
 v1, v2 = 0, 0
-for l in range(n - 1):
-    candidate = lower_bound(a, l + 1, n - 1, -a[l])
-    if l < candidate - 1 and abs(a[l] + a[candidate-1]) < best_sum:
-        best_sum = abs(a[l] + a[candidate - 1])
-        v1, v2 = a[l], a[candidate - 1]
-    
-    if candidate < n and abs(a[l] + a[candidate]) < best_sum:
+for l in range(len(a)-1):
+    candidate = lower_bound(a, l+1, len(a)-1, -a[l])
+
+    if abs(a[l] + a[candidate]) < best_sum:
         best_sum = abs(a[l] + a[candidate])
         v1, v2 = a[l], a[candidate]
-
+    
+    if l < candidate-1 and abs(a[l] + a[candidate-1]) < best_sum:
+        best_sum = abs(a[l] + a[candidate-1])
+        v1, v2 = a[l], a[candidate-1]
+    
 print(v1, v2)
