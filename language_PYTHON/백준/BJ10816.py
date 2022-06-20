@@ -1,29 +1,35 @@
+# 숫자카드2
 import sys
 si = sys.stdin.readline
-n = int(si())
-a = sorted(list(map(int, si().split())))
 
-def lower_bound(a, l, r, x):
-    res = r + 1
-    while l <= r:
-        mid = (l + r) // 2
-        if a[mid] >= x:
-            res = mid
-            r = mid - 1
-        else: l = mid + 1
+N = int(si())
+A = sorted(list(map(int, si().split())))
+M = int(si())
+B = list(map(int, si().split()))
+
+# target보다 작거나 같은 것 중 가장 큰 것의 인덱스
+def lower_bound(array, start, end, target):
+    res = 0
+    while start<=end:
+        mid = (start+end)//2
+        if array[mid] <= target:
+            res = mid + 1
+            start = mid + 1
+        else:
+            end = mid - 1 
+    return res
+# target보다 작은 것 중 가장 큰 것의 인덱스
+def upper_bound(array, start, end, target):
+    res = 0
+    while start<=end:
+        mid = (start+end)//2
+        if array[mid] < target:
+            res = mid + 1
+            start = mid + 1
+        else:
+            end = mid - 1 
     return res
 
-def upper_bound(a, l, r, x):
-    res = r + 1
-    while l <= r:
-        mid = (l + r) // 2
-        if a[mid] > x:
-            res = mid
-            r = mid - 1
-        else: l = mid + 1
-    return res
-print(a)
-m = int(si())
-b = list(map(int, si().split()))
-for x in b:
-    print(upper_bound(a, 0, n - 1, x) - lower_bound(a, 0, n - 1, x), end=' ')
+for item in B:
+    print(lower_bound(A, 0, len(A)-1, item) - upper_bound(A, 0, len(A)-1, item), end=' ')
+
