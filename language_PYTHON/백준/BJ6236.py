@@ -7,29 +7,30 @@ A = []
 for i in range(N):
     A.append(int(si()))
 
-# 인출금액 뽑기
-def determination(k):
-    # 뽑은 상태에서 시작
+
+def determination(array, mid, target):
+    # 돈을 넣은 채로 시작
     cnt = 1
-    coin = k
-    for i in A:
-        # 돈이 부족한 경우
-        if coin - i < 0:
-            cnt += 1
-            coin = k
-        # 돈이 여유로운 경우
+    in_pocket = mid
+    for i in array:
+        if in_pocket >= i:
+            in_pocket -= i
         else:
-            coin -= i
-    # 작기만 하면 인출해서 맞추면 되므로 <= 부등호
-    return cnt <= M
+            cnt += 1 # 주머니에서 돈 꺼내기
+            in_pocket = mid - i # 사용
+            
+    return cnt <= target
 
-start, end, ans = max(A), 1000000000, 0
-while start<=end:
-    mid = (start+end)//2
-    if determination(mid):
-        ans = mid
-        end = mid - 1
-    else:
-        start = mid + 1 
+def Binary(array, start, end, target):
+    ans = 0
+    while start<=end:
+        mid = (start + end) // 2
+        
+        if determination(array, mid, target):
+            ans = mid
+            end = mid - 1
+        else:
+            start = mid + 1 
+    return ans
 
-print(ans)
+print(Binary(A, max(A), int(1e6), M))
