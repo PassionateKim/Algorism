@@ -17,3 +17,5 @@
 :books:BOJ 길라잡이(Beta) : [https://ryute.tistory.com/m/33](https://ryute.tistory.com/m/33)</br> 
 기간: 2022년 4월 ~ 
 
+:books:백준 추천 문제집 : [https://github.com/tony9402/baekjoon](https://github.com/tony9402/baekjoon)</br> 
+기간: 2022년 6월 ~
