@@ -1,40 +1,30 @@
-#피보나치 수열 DP
-
-T = int(input())
-
-#0 1 1 2 3 5 8 13 21 34 55 89 ...~
+#피보나치 함수
+import sys
+si = sys.stdin.readline
+dp = [(1,0), (0,1)] + [0] * 50
 
 def fibo(x):
-    zero = [1,0]
-    one = [0,1]
-    for i in range(2,x+1):
-        zero.append(zero[i-1]+zero[i-2])
-        one.append(one[i-1]+one[i-2])
-    print(zero[x],one[x])    
+    if dp[x] == 0:
+        tmp1, tmp2 = fibo(x-1)
+        tmp3, tmp4 = fibo(x-2)
+        dp[x] = (tmp1+tmp3, tmp2+tmp4)
+    else:
+        return dp[x]
 
+    return dp[x]
+
+
+T = int(si())
 for i in range(T):
-    N = int(input())
-    fibo(N)
+    tmp = int(si())
+    val = fibo(tmp)
+    print(val[0], val[1])    
     
 
 
 
 
-
 # import time
-
-# def fibo(x):
-#     if x == 1 or x == 2:
-#         return 1
-
-#     return fibo(x-1) + fibo(x-2)
-
-# print("재귀함수 활용")
-# for num in range(5,40,10):
-#     start = time.time()
-#     res = fibo(num)
-#     print(res,"->런닝타임",round(time.time()-start,2),'초')
-# print("------------------")
 
 # print("top-down DP 활용")
 # d = [0] * 50
