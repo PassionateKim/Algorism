@@ -2,149 +2,85 @@
 import sys
 si = sys.stdin.readline
 
-def getHang():
-    x, y = N//2, 0
-    arr = []
-
-    while y < N:
-        arr.append(graph[x][y])
-        y += 1
-
-    return arr
-
-def getJuDagak():
-    x, y = 0, 0
-    arr = []
-
-    while x < N:
-        arr.append(graph[x][y])
-        x += 1
-        y += 1
-
-    return arr
-
-def getYeol():
-    x, y = 0, N//2
-    arr = []
-
-
-    while x < N:
-        arr.append(graph[x][y])
-        x += 1
-    
-    return arr
-
-def getBuDagak():
-    x, y = N-1, 0
-    arr = []
-
-    while x >= 0:
-        arr.append(graph[x][y])
-        x -= 1
-        y += 1
-
-    return arr    
-
 T = int(si())
+
+def clockWise(d):
+    num = d // 45
+
+    for i in range(num):
+        beforeArray = []
+        # 행 저장하기
+        for i in range(n):
+            beforeArray.append(graph[n//2][i])
+        
+        # 행 -> 주대각선
+        for i in range(n):
+            tmp2 = graph[i][i]
+            graph[i][i] = beforeArray[i]
+            beforeArray[i] = tmp2
+        
+
+        # 주대각선 -> 열
+        for i in range(n):
+            tmp2 = graph[i][n//2]
+            graph[i][n//2] = beforeArray[i]
+            beforeArray[i] = tmp2
+
+        #열 -> 부대각선
+        for i in range(n): # 4 3 2 1 0 
+            tmp2 = graph[(n-1)-i][i]
+            graph[(n-1)-i][i] = beforeArray[(n-1)-i]
+            beforeArray[(n-1)-i] = tmp2
+
+        # 부대각선 -> 행 
+        for i in range(n): 
+            graph[n//2][i] = beforeArray[n-1-i]
+       
+    return
+
+def counterClockWise(d):
+    num = abs(d) // 45
+
+    for i in range(num):
+        beforeArray = []
+        # 행 저장하기
+        for i in range(n):
+            beforeArray.append(graph[n//2][i])
+        
+        # 행 -> 부대각선
+        for i in range(n):
+            tmp2 = graph[n-1-i][i]
+            graph[n-1-i][i] = beforeArray[i]
+            beforeArray[i] = tmp2
+
+        # 부대각선 -> 열
+        for i in range(n):
+            tmp2 = graph[i][n//2] # 3 8 13 18 23
+            graph[i][n//2] = beforeArray[n-1-i]
+            beforeArray[n-1-i] = tmp2 # 23 18 13 8 3
+        # before = [23, 18, 13, 8, 3]
+        beforeArray.reverse() # -> [3, 8, 13, 18, 23]
+        #열 -> 주대각선
+        for i in range(n): # 4 3 2 1 0 
+            tmp2 = graph[i][i]  # 1 7 13 19 25
+            graph[i][i] = beforeArray[i]
+            beforeArray[i] = tmp2
+        # before = [1, 7, 13, 19, 25]
+        
+        # 주대각선 -> 행 
+        for i in range(n): 
+            graph[n//2][i] = beforeArray[i]
+        
+    return
+
 for i in range(T):
-    N, angle = map(int, si().split())
-    graph = []
-    for i in range(N):
-        graph.append(list(map(int, si().split())))
-    # 2차원 배열에 대각선, 열, 행 저장하기
-    arr = []
+    n, d = map(int, si().split())
+    graph = [list(map(int, si().split())) for _ in range(n)]
 
-    hang = getHang()    
-    juDagak = getJuDagak()
-    yeol = getYeol()
-    buDagak = getBuDagak()
-    
-    # 값 넣기
-    arr.append(hang)
-    arr.append(juDagak)
-    arr.append(yeol)
-    arr.append(buDagak)
-    
-    # 행 주 열 부
-    
-    # 45, 90, 135인 경우 < 180 인 경우
-    if angle == 45: # 45도인 경우 
-        arr[0], arr[1], arr[2], arr[3] = arr[3], arr[0], arr[1], list(reversed(arr[2]))
-    
-    elif angle == 90: # 90도인 경우
-        arr[0], arr[1], arr[2], arr[3] = list(reversed(arr[2])), arr[3], arr[0], list(reversed(arr[1]))
-    
-    elif angle == 135: # 135도 인 경우
-        arr[0], arr[1], arr[2], arr[3] = list(reversed(arr[1])), list(reversed(arr[2])), arr[3], list(reversed(arr[0]))
-    
-    elif angle == 180: # 180도 인 경우
-        arr[0].reverse()
-        arr[1].reverse()
-        arr[2].reverse()
-        arr[3].reverse()
-
-    elif angle == 225: # 225도 인 경우
-        # for i in arr:
-        #     print(i)
-        # print("---")
-        arr[0], arr[1], arr[2], arr[3] = list(reversed(arr[3])), list(reversed(arr[0])), list(reversed(arr[1])), arr[2]
-
-    elif angle == 270:
-        arr[0], arr[1], arr[2], arr[3] = arr[2], list(reversed(arr[3])), list(reversed(arr[0])), arr[1]
-    
-    elif angle == 315:
-        arr[0], arr[1], arr[2], arr[3] = arr[1], arr[2], list(reversed(arr[3])), arr[0]
-
-    elif angle == 360:
-        pass
-    
-    # 마이너스
-    if angle == -45: # 45도인 경우 
-        arr[0], arr[1], arr[2], arr[3] = arr[1], arr[2], list(reversed(arr[3])), arr[0]
-    
-    elif angle == -90: # 90도인 경우
-        arr[0], arr[1], arr[2], arr[3] = arr[2], list(reversed(arr[3])), list(reversed(arr[0])), arr[1]
-    
-    elif angle == -135: # 135도 인 경우
-        arr[0], arr[1], arr[2], arr[3] = list(reversed(arr[3])), list(reversed(arr[0])), list(reversed(arr[1])), arr[2]
-    
-    elif angle == -180: # 180도 인 경우
-        arr[0].reverse()
-        arr[1].reverse()
-        arr[2].reverse()
-        arr[3].reverse()
-    
-    elif angle == -225: # 225도 인 경우
-        arr[0], arr[1], arr[2], arr[3] = list(reversed(arr[1])), list(reversed(arr[2])), arr[3], list(reversed(arr[0]))
-
-    elif angle == -270:
-        arr[0], arr[1], arr[2], arr[3] = list(reversed(arr[2])), arr[3], arr[0], list(reversed(arr[1]))
-    
-    elif angle == -315:
-        arr[0], arr[1], arr[2], arr[3] = arr[3], arr[0], arr[1], list(reversed(arr[2]))
-    elif angle == -360:
-        pass
-
-    
-    # 행
-    graph[N//2] = arr[0]
-    
-    # 주대각
-    x, y = 0, 0
-    for i in arr[1]:
-        graph[x][y] = i
-        x += 1
-        y += 1
-    # 열
-    x, y = 0, N//2
-    for i in arr[2]:
-        graph[x][y] = i
-        x += 1 
-    x, y = N-1, 0
-    for i in arr[3]:
-        graph[x][y] = i
-        x -= 1
-        y += 1
+    if d >= 0:  
+        clockWise(d)
+    else:
+        counterClockWise(d)
     
     for i in graph:
         print(*i)
