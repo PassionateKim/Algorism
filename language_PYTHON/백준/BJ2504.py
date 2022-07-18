@@ -2,60 +2,39 @@
 import sys
 si = sys.stdin.readline
 
-# 올바른 괄호열인지 체크하는 함수
-def isOk(arr):
-    soe = [] # 소괄호
-    dae = [] # 대괄호
-    flag = -1 # 초기상태
+stack = []
+answer = 0
+tmp = 1
+char_list = list(si().strip()) 
 
-    for i in range(len(arr)):
-        # 소괄호
-        if arr[i] == '(' or arr[i] ==')':
-            if arr[i] == '(':
-                soe.append('(')
-                flag = 0
-            else: # == ')'
-                if soe and (flag == 0 or flag == -1):
-                    soe.pop()
-                    if not soe: # 쌍을 다 맞춘 경우
-                        flag = -1
-                else:
-                    return False
-        # 대괄호
-        if arr[i] == '[' or arr[i] == ']':  
-            if arr[i] == '[':
-                dae.append('[')
-                flag = 1 
-            else:
-                if dae and (flag == 1 or flag == -1):
-                    dae.pop()
-                    if not dae: # 쌍을 다 맞춘 경우
-                        flag = -1
-                else:
-                    return False
+for i in range(len(char_list)):
+    char = char_list[i]
+
+    if char == '(':
+        stack.append(char)
+        tmp *= 2 # 2배로 올린다.
+    elif char == '[':
+        stack.append(char)
+        tmp *= 3
+
+    elif char == ')':
+        if not stack or stack[-1] == '[':
+            answer = 0
+            break
+        if char_list[i-1] == '(':
+            answer += tmp
+        tmp = tmp // 2
+        stack.pop()
+    else: # char == ']'
+        if not stack or stack[-1] == '(':
+            answer = 0
+            break
+        if char_list[i-1] == '[':
+            answer += tmp
+        tmp = tmp // 3
+        stack.pop()
+        
+if stack:
+    answer = 0
     
-    return not (soe or dae)
-
-
-string_input = si().strip()
-
-if isOk(string_input):
-    tmp = 1
-    res = 0
-    for i in range(len(string_input)):
-        if string_input[i] == '(':
-            tmp = tmp * 2
-        elif string_input[i] == '[':
-            tmp = tmp * 3 
-
-        elif string_input[i] == ')':
-            if string_input[i-1] == '(':
-                res += tmp
-            tmp = tmp // 2
-        elif string_input[i] == ']':
-            if string_input[i-1] == '[':
-                res += tmp
-            tmp = tmp // 3
-    print(res)
-else:
-    print(0)
+print(answer)
