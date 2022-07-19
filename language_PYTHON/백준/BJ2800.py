@@ -1,31 +1,31 @@
 # 괄호 제거
 from itertools import combinations
 import sys
-
 si = sys.stdin.readline
 
-l = [] # 안에서 밖 순서로 괄호 쌍의 위치를 저장한다.
-stack = []
-answer = set()
 input = si().strip()
-for idx, v in enumerate(list(input)):
-    if v == '(':
-        stack.append(idx)
-    elif v == ')':
-        start = stack.pop()
-        end = idx
-        l.append([start, end])
+stack = []
+candidate = []
+answer = list()
 
-for i in range(1, len(l) + 1):
-    combi = combinations(l, i)
-    for j in combi:
-        tmp = list(input)
-        for k in j:
-            start, end = k
-            tmp[start] = ''
-            tmp[end] = ''
-        answer.add(''.join(tmp))
+# 쌍 저장하기
+for idx, str in enumerate(input):
+    if str == '(':
+        stack.append([idx, str])
+    elif str == ')':
+        i, s = stack.pop()
+        candidate.append([i, idx])
 
-for i in sorted(list(answer)):
+# combination으로 문제 해결하기
+for i in range(1, len(candidate) + 1):
+    combi = combinations(candidate, i) #(([3, 6], [0, 5]), ([3, 6], [1, 7]), ([0, 5], [1,7])) 
+    for l in combi: # ([3, 6], [0, 5])   ([3, 6], [1, 7])   ([0, 5], [1,7])
+        tmp = list(input) 
+        for k in l: 
+            left, right = k
+            tmp[left] = ''
+            tmp[right] = ''
+        answer.append("".join(tmp))
+
+for i in sorted(answer):
     print(i)
-        
