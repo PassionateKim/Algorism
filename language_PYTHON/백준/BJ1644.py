@@ -1,5 +1,6 @@
 # 2022-05-15
 # 2022-07-28
+# 2022-07-29
 # 소수의 연속합
 import sys
 si = sys.stdin.readline
@@ -7,7 +8,8 @@ si = sys.stdin.readline
 N = int(si())
 # 1. 소수 배열 만들기 - 에라토스의 체
 # 0, 1, 2, 3, 4, 5 ,6, 7, 8, 9, 10, 11, 12 
-prime_num = [False, False] + [True] * (N-1)
+prime_num = [False, False] + [True] * (N-1
+)
 prime_list = []
 for i in range(2, len(prime_num)):
     if prime_num[i] == True:
@@ -25,11 +27,15 @@ while True:
     if interval_sum >= N:
         if interval_sum == N:
             answer += 1
+        
         interval_sum = interval_sum - prime_list[start]
         start += 1
+
+    elif interval_sum < N:
+        interval_sum = interval_sum + prime_list[end]
+        end += 1
+    
     elif end == len(prime_list):
         break
-    else:
-        interval_sum += prime_list[end]
-        end += 1
+
 print(answer)
