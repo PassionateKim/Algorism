@@ -1,23 +1,35 @@
+# 2022-07-30
 # 오픈채팅방
-from collections import defaultdict, deque
 
 def solution(record):
-    answer = []
-    nickName_dict = dict() # id: nickName
-    
-    for info in record:
-        if info.split()[0] in "Enter&&Change":
-            id, nick_name = info.split()[1], info.split()[2]
-            nickName_dict[id] = nick_name
-    
-    for info in record:
-        command, id = info.split()[0], info.split()[1]
-        if command == "Enter":
-            answer.append(nickName_dict[id]+"님이 들어왔습니다.")
-        elif command == "Leave":
-            answer.append(nickName_dict[id]+"님이 나갔습니다.")
+    result = []
+    id_nick_dict = dict()
+    # 1.id: nick dict 저장
+    for r in record:
+        chars = r.split()
         
-    return answer
+        # 데이터 길이가 3개일 때 (Enter, Change)
+        if len(chars) == 3:
+            id_nick_dict[chars[1]] = chars[2]
+    # /1.id nick dict
+
+    for r in record:
+        cmd = r.split()[0] 
+        id = r.split()[1]
+
+        if cmd == "Enter":
+            tmp = id_nick_dict[id] + "님이 들어왔습니다."
+            result.append(tmp)
+        elif cmd == "Leave":
+            tmp = id_nick_dict[id] + "님이 나갔습니다."
+            result.append(tmp)
+        
+        
+
+
+    print(result)    
+    return result
+    
 
 solution(["Enter uid1234 Muzi", "Enter uid4567 Prodo","Leave uid1234","Enter uid1234 Prodo","Change uid4567 Ryan"])
 
