@@ -1,52 +1,40 @@
 # 2022-06-06
 # 2022-07-29
+# 2022-07-30
 # 문자열 압축
-
 def solution(s):
-    answer = 1000
-    
-    # 체크할 길이
-    if len(s) == 1:
-        return len(s)
-
-    for i in range(1, len(s)//2 + 1):
-        i = 2
+    result = 1000
+    # 1. 문자열 자르는 개수
+    for i in range(1, len(s) + 1):
         tmp = s[0:i]
         cnt = 1
-        tmp_str = ""
-        for j in range(i, len(s)+1, i):
-            check = s[j:j+i]
-            # 같으면
-            if tmp == check:
-                cnt += 1
-                
-            else: # 다르면
-                # 하나일 때는 포함하지 않는다.
-                if cnt != 1:
-                    tmp_str += (str(cnt) + tmp)
-                elif cnt == 1:
-                    tmp_str += tmp    
-                # tmp를 바꿔준다.
-                tmp = check
-                cnt = 1 # 초기화
+        answer = ""
+        # 2. 문자열 탐색
+        for j in range(i, len(s), i):
+            string = s[j:j+i]
             
-        # 마무리
-        check = s[j:]
-        # 꼬리 체크
-        # 개수가 다른 경우     
-        if len(check) != i: 
-                tmp_str += check
-        # 개수가 같은 경우 어떤 경우든 나머지를 넣어야하므로
-        else:
-            if cnt != 1:
-                    tmp_str += (str(cnt) + tmp)
-            else:
-                tmp_str += tmp
-        
-        answer = min(answer, len(tmp_str))    
-    
-    # /체크 
-    return answer
+            # 다른 경우
+            if tmp != string:
+                if cnt > 1:
+                    answer += str(cnt)
+                answer += tmp
 
-solution("abcabcabcabcdededededede")
-# solution("aabbaccc")
+                # 초기화
+                tmp = string
+                cnt = 1
+            # 같은 경우 
+            else:
+                cnt += 1
+
+
+        # 3. 나머지 체크
+        if cnt > 1:
+            answer += str(cnt)
+        answer += tmp
+        result = min(result, len(answer))
+    # /1.
+    
+    
+    return result
+
+solution("ababab")
