@@ -1,19 +1,21 @@
+# 2022-06-09
+# 2022-08-02
 # 짝지어 제거하기
-from collections import deque
 
 def solution(s):
-    answer = -1
-    check_list = []
-    for i in s:
-        print(i)
+    tmp = []
+    result = 0
+    tmp.append(s[0])
 
-    return answer
+    for i in range(1, len(s)):
+        if tmp and tmp[-1] == s[i]:
+            tmp.pop()
+        else:
+            tmp.append(s[i])
+    
+    if not tmp:
+        result = 1
+        
+    return result
 
-solution("aab")
-
-# for i in s:
-# a = []
-# if a[-1] == i:
-#      a.pop()
-# else:
-#      a.append(i)
+print(solution("bbbbbb"))
