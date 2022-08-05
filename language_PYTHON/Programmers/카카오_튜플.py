@@ -1,24 +1,28 @@
 # 2022-08-05
+# 2022-08-06
 # 튜플
 import re
-from collections import defaultdict
 def solution(s):
     answer = []
-    result = re.findall('[{][\d,]+[}]', s)
-    result.sort(key=lambda x: len(x))
-    now = set()
-    print("result", result)
-    for x in result:
-        next = set(list(x[1:-1].split(',')))
-        print("next", next)
-        print("now", now)
-        print(next - now)
-        exit()
-        num = list(next - now)[-1]
-        answer.append(int(num))
-        now = next
-
+    r = re.findall('{[\d,]+}', s)
+    print(r)
+    s = re.split(r'({[\d,]+})', s[1:-1])
+    for i in s:
+        if i == ',':
+            s.remove(",")
+        elif i == '':
+            s.remove('')
+    arr = []
+    for i in s:
+        arr.append(i[1:-1].split(","))
+    
+    arr.sort(key=lambda x:len(x))
+    
+    for i in arr:
+        for j in i:
+            if int(j) not in answer:
+                answer.append(int(j))
+    
     return answer
-
 
 solution("{{2},{2,1},{2,1,3},{2,1,3,4}}")
