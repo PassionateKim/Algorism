@@ -1,5 +1,6 @@
 # 2022-08-05
 # 2022-08-06
+# 2022-08-12
 # 튜플
 import re
 def solution(s):
@@ -7,22 +8,23 @@ def solution(s):
     r = re.findall('{[\d,]+}', s)
     print(r)
     s = re.split(r'({[\d,]+})', s[1:-1])
-    for i in s:
-        if i == ',':
-            s.remove(",")
-        elif i == '':
-            s.remove('')
-    arr = []
-    for i in s:
-        arr.append(i[1:-1].split(","))
-    
-    arr.sort(key=lambda x:len(x))
-    
-    for i in arr:
-        for j in i:
-            if int(j) not in answer:
-                answer.append(int(j))
-    
-    return answer
+    # # ", 제거"
+    # for i in s:
+    #     if i == ',':
+    #         s.remove(i)
 
-solution("{{2},{2,1},{2,1,3},{2,1,3,4}}")
+    # # 길이 순 정렬
+    # s.sort(key = lambda x: len(x))
+    # tmp = list()
+
+    # for i in s:
+    #     tmp.append(i.split(","))
+    # # # 키로 저장하기
+    # for i in tmp:
+    #     for j in i:
+    #         if int(j) not in answer:
+    #             answer.append(int(j))
+    
+    # return answer
+
+solution("{{20,111},{111}}")
