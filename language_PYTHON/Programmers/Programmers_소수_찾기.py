@@ -1,34 +1,39 @@
 # 2022-08-09
 # 2022-08-10
+# 2022-08-13
 # 소수 찾기
-from itertools import combinations, permutations
-from collections import deque;
+from itertools import permutations
+
 
 def solution(numbers):
-    def checkPrime(num):
-        # 예외 조건
-        if num < 2:
+    def isPrime(val : int):
+        if val < 2:
             return False
 
-        for i in range(2, num//2 + 1):
-            # 나눠지면
-            if num % i == 0:
+        # 나눠지면 소수가 아니다.
+        for i in range(2, val):
+            if val % i == 0:
                 return False
 
         return True
-
-    answer = 0
-    numbers = list(numbers)
-    tmp = []
-
+    answer = set()    
     for i in range(1, len(numbers) + 1):
-        tmp += list(permutations(numbers, i))
-    num =set(int(''.join(t)) for t in tmp)
-
-    for i in num:
-        if checkPrime(i):
-            answer += 1
+        per = list(permutations(numbers, i))
+        tmp = set()
+        # 중복 제거하기
+        for i in per:
+            tmp.add(i)
+        # 가능한 값 다 넣기
+        for tu in tmp:
+            string = ""
+            for j in range(len(tu)):
+                if j == 0 and tu[j] == '0': continue
+                string += tu[j]
+            
+            if string and isPrime(int(string)):
+                answer.add(int(string))
     
-    return answer
+
+    return len(answer)
 
 print(solution("17"))
