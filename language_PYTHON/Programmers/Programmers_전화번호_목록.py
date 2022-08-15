@@ -1,18 +1,20 @@
 # 2022-08-08
 # 2022-08-09
+# 2022-08-11
+# 2022-08-15
 # 전화번호 목록
 def solution(phone_book):
-    phone_book_dict = dict()
+    phone_book = set(phone_book)
 
-    for i in phone_book:
-        phone_book_dict[i] = 1
-
-    for string in phone_book:
+    for p in phone_book:
         tmp = ''
-        for i in string:
+        for i in p:
             tmp += i
-            if tmp in phone_book_dict and tmp != string:
-                return False
+            if tmp in phone_book and tmp != p:
+                return False        
+
+
+
     return True 
 
 
