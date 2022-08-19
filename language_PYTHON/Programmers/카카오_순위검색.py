@@ -1,48 +1,44 @@
 # 2022-08-16
 # 2022-08-17
+# 2022-08-19
 # 순위검색
 from bisect import bisect_left
 from collections import defaultdict
 from itertools import combinations
 def solution(information, queries):
     answer = []
-    answer_dict = defaultdict(list)
-    # 1. 데이터 넣기
+    candidate_dict = defaultdict(list)
+    # 1. information을 dict에 다 넣기
     for info in information:
         info = info.split()
-
-        # 모두 dict에 저장해버리기
-        # key_list와 score 구하기
         key_list = info[:-1]
         score = int(info[-1])
         
-        # 그 외
         for i in range(5):
-            combi = list(combinations([0,1,2,3], i))
-
-            # combi 단위로 -로 바꿔서 dict에 담기
-            for com in combi: #[(0,1,2), (1,2,3)]
+            combi_list = list(combinations([0,1,2,3], i)) # [(0, 1), (0, 2), (0, 3), (1, 2), (1, 3), (2, 3)]        
+            for combi in combi_list: # [0, 1] in [(0, 1), (0, 2), (0, 3), (1, 2), (1, 3), (2, 3)]
                 tmp = key_list[:]
-                for j in com: #(0,1,2)
-                    tmp[j] = '-'
-                answer_dict["".join(tmp)].append(score) 
-    
-    # 2. 데이터 정렬 for 이분탐색
-    for value in answer_dict.values():
-        value.sort()
-    
-    # 3. 이분탐색으로 체크
-    for query in queries:
-        query = query.replace("and",'')
-        query = query.split()
-        condition = query[:-1]
-        score = int(query[-1])
-        key = "".join(condition)
+                print("combi:",combi)
+                for idx in combi: # 0, 1
+                    tmp[idx] = '-'
+            
+                candidate_dict["".join(tmp)].append(score)
 
-        # 키가 있는 경우
-        if key in answer_dict.keys():
-            val = answer_dict[key] # list
-            count = len(val) - bisect_left(val, score)
+    # 2. 정렬
+    for value in candidate_dict.values():
+        value.sort() 
+                    
+    # 3. 체크하기
+    for query in queries:
+        query = query.replace('and','')
+        query = query.split()
+        key = "".join(query[:-1])
+        score = int(query[-1])
+        
+        count = 0
+        if key in candidate_dict.keys():
+            count = len(candidate_dict[key]) - bisect_left(candidate_dict[key], score)
+
         answer.append(count)
     print(answer)
     return answer
