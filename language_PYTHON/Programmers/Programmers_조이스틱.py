@@ -1,20 +1,25 @@
 # 2022-08-19
+# 2022-08-20
 def solution(name):
     answer = 0
-    # 상하로 갯수 미리 세서 다 더해두기
-    num_list = [min(abs(ord('A')- ord(n)), 26-abs(ord('A')-ord(n))) for n in name]
-    answer += sum(num_list)
-    min_move = len(name) - 1
-    for i, c in enumerate(name):
-        next_i = i+1
-        while next_i < len(name) and name[next_i] == 'A':
-            next_i += 1
-        # 각 문자부터 A.. 문자가 있을 경우 몇번씩 조이 스틱을 쓰는지 체크한다.
-        # 기존, 연속된 A의 왼쪽 시작 방식, 연속된 A의 오른쪽 시작 비교 및 갱신
-        min_move = min(min_move, 2*i + len(name) - next_i, 2*(len(name)-next_i)+i)
+    name_list = list(name)
+    min_cnt = len(name_list) - 1
+    # 1. 각 자리수 체크
+    for string in name_list:  
+        cnt = min(abs(ord(string) - ord('A')), 26 - (ord(string) - ord('A')))
+        answer += cnt
     
-    answer += min_move
-    
+    # 2. min 체크
+    for idx, string in enumerate(name_list):
+        next = idx+1 # 왼쪽 
+        # AAAA 같은 것이 있을 수 있으므로 체크
+        while next < len(name_list) and name_list[next] == 'A':
+            next += 1
+        # 일반적인 경우, A의 왼쪽에서 탐색 시작하는 경우, A의 오른쪽에서 탐색 시작하는 경우
+        min_cnt = min(min_cnt, (2*idx + len(name_list) - next), 2*(len(name_list)- next)+idx)
+
+    answer += min_cnt
+
     return answer
 
-print(solution("BCAAABCD"))
+print(solution("ABAAAAAAAAABB"))
