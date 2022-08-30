@@ -1,46 +1,50 @@
 # 2022-08-16
 # 2022-08-17
 # 2022-08-19
+# 2022-08-30
 # 순위검색
 from bisect import bisect_left
 from collections import defaultdict
 from itertools import combinations
+
+
 def solution(information, queries):
     answer = []
     candidate_dict = defaultdict(list)
-    # 1. information을 dict에 다 넣기
+    # 1. candidate_dict 만들기
     for info in information:
         info = info.split()
         key_list = info[:-1]
-        score = int(info[-1])
         
-        for i in range(5):
-            combi_list = list(combinations([0,1,2,3], i)) # [(0, 1), (0, 2), (0, 3), (1, 2), (1, 3), (2, 3)]        
-            for combi in combi_list: # [0, 1] in [(0, 1), (0, 2), (0, 3), (1, 2), (1, 3), (2, 3)]
-                tmp = key_list[:]
-                print("combi:",combi)
-                for idx in combi: # 0, 1
-                    tmp[idx] = '-'
-            
-                candidate_dict["".join(tmp)].append(score)
+        score = int(info[-1])
 
-    # 2. 정렬
+        c = [i for i in range(len(key_list))]
+        for i in range(len(key_list) + 1):
+            combi_list = list(combinations(c, i))
+            for combi in combi_list:
+                tmp = key_list[:]
+                for idx in combi:
+                    tmp[idx] = '-'
+                candidate_dict["".join(tmp)].append(score)
+    
+    # 2. candidate_dict 정렬하기
     for value in candidate_dict.values():
-        value.sort() 
-                    
-    # 3. 체크하기
+        value.sort()
+    
+    # 3. 이분탐색으로 개수구하기
     for query in queries:
-        query = query.replace('and','')
+        query = query.replace("and","")
         query = query.split()
-        key = "".join(query[:-1])
+        key_list = query[:-1]
+        key = "".join(key_list)
         score = int(query[-1])
         
-        count = 0
         if key in candidate_dict.keys():
-            count = len(candidate_dict[key]) - bisect_left(candidate_dict[key], score)
+            count = 0
+            val = len(candidate_dict[key]) - bisect_left(candidate_dict[key], score)
+            print(val)
+    exit()
 
-        answer.append(count)
-    print(answer)
     return answer
 
 solution(["java backend junior pizza 150","python frontend senior chicken 210","python frontend senior chicken 150","cpp backend senior pizza 260","java backend junior chicken 80","python backend senior chicken 50"],
