@@ -1,36 +1,31 @@
 # 2022-09-01
 # 2022-09-02
+# 2022-09-04
 # 다리를 지나는 트럭
 from collections import deque
 def solution(bridge_length, weight, truck_weights):
-    truck_stack = deque()
     answer = 0
+    stack = deque()
     truck_weights = deque(truck_weights)
-    
+
+
     while truck_weights:
-        answer += 1
         sumi = 0
-        # 트럭의 무게 
-        for truck in truck_stack:
-            sumi += truck[0]
-        # 트럭의 무게 체크해서 올리기
-        if sumi + truck_weights[0] <= weight:
-            truck_stack.append([truck_weights.popleft(), bridge_length]) 
-        # answer +=1 을 한 상태이니 -1 해준다
-        for truck in truck_stack:
-            truck[1] -= 1
-        
-        # 트럭이 다리를 건넌다면 뺀다
-        if truck_stack[0][1] == 0:
-            truck_stack.popleft()
-    
-    while truck_stack:
         answer += 1
-        
-        if truck_stack[0][1] == 0:
-            truck_stack.popleft()
-        for truck in truck_stack:
+        # 1. 현재 다리에 있는 트럭의 무게 체크
+        for truck in stack:
+            sumi += truck[0]
+        # 1.1 트럭이 건널 수 있다면
+        if sumi + truck_weights[0] <= weight:
+            stack.append([truck_weights.popleft(), bridge_length])
+        # 시간이 경과한 상태를 가정하므로
+        for truck in stack:
             truck[1] -= 1
+        
+        # 트럭이 끝점에 도달했다면
+        if stack[0][1] == 0:
+            stack.popleft()
+
     print(answer)
     return answer
 
