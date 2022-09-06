@@ -3,6 +3,7 @@
 # 2022-09-04
 # 다리를 지나는 트럭
 from collections import deque
+from turtle import st
 def solution(bridge_length, weight, truck_weights):
     answer = 0
     stack = deque()
@@ -26,7 +27,14 @@ def solution(bridge_length, weight, truck_weights):
         if stack[0][1] == 0:
             stack.popleft()
 
-    print(answer)
+    while stack:
+        answer += 1 
+        if stack[0][1] == 0:
+            stack.popleft()
+        
+        for truck in stack:
+            truck[1] -= 1
+
     return answer
 
 solution(2, 10, [7,4,5,6])
