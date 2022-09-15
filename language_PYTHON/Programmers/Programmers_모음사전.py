@@ -1,14 +1,18 @@
 # 2022-09-15
+# 2022-09-16
 # 모음사전
+
 from itertools import product
 
 def solution(word):
-    answer = 0
-    words = []
+    answer = []
     for i in range(1, 6):
-        for c in product(['A', 'E', 'I', 'O', 'U'], repeat=i):
-            words.append(''.join(list(c)))
-    print(words)
-    return answer
+        tmp = product(['A', 'E', 'I', 'O', 'U'], repeat = i)
+        for i in tmp:
+            answer.append("".join(i))
 
-solution("AAAAE")
+    answer.sort()
+
+    return answer.index(word) + 1    
+
+print(solution("AAAAE"))
