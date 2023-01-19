@@ -1,64 +1,48 @@
 # 토마토
+# 복습 횟수:3, 00:30:00, 복습 필요
 import sys
 from collections import deque
 si = sys.stdin.readline
-
-# 상하좌우
-dx = [-1,1,0,0]
-dy = [0,0,-1,1]
-
-graph = []
+dx = [-1, 1, 0, 0]
+dy = [0, 0, -1, 1]
 
 M, N = map(int, si().split())
-
+tomato_list = []
+visited = [[0 for _ in range(M)] for __ in range(N)]
 for i in range(N):
     tmp = list(map(int, si().split()))
-    graph.append(tmp)
+    tomato_list.append(tmp)
 
-answer = 0
-riped_tomato = 0
-no_tomato = 0
 def bfs():
-    global riped_tomato
-    global no_tomato
     q = deque()
-    tmp = 0
     for i in range(N):
         for j in range(M):
-            if graph[i][j] == 1:
-                riped_tomato = riped_tomato + 1
-                q.append((i, j, 0))
-
-            if graph[i][j] == -1:
-                no_tomato = no_tomato + 1
-    # 첫번째 경우                
-    if no_tomato + riped_tomato == N * M :
-        print(0)
-        exit()
-
+            if tomato_list[i][j] == 1:
+                q.append([i, j, 0]) # 첫날이니까 0으로 한다.
+                visited[i][j] = 1 # 방문 처리
+            if tomato_list[i][j] == -1:
+                visited[i][j] = -1
+    
     while q:
         x, y, count = q.popleft()
+        for idx in range(4):
+            nx, ny = x + dx[idx], y + dy[idx]
 
-        for i in range(4):
-            nx = x + dx[i]
-            ny = y + dy[i]
+            if not (0 <= nx < N and 0 <= ny < M): continue
+            if visited[nx][ny] != 0: continue
+            if tomato_list[nx][ny] == -1: continue
 
-            if not (0 <= nx < N and 0 <= ny < M): continue # 범위 넘었을 시 continue
-            if graph[nx][ny] != 0: continue
-
-            q.append((nx, ny, count+1))
-            graph[nx][ny] = count + 1
-    
-    for i in range(N):
-        for j in range(M):
-            if graph[i][j] == 0:
-                print(-1)
-                exit()
-    return        
+            q.append([nx, ny, count + 1])
+            visited[nx][ny] = visited[x][y] + 1
+    return
 
 bfs()
-
+answer = 0
 for i in range(N):
-    answer = max(answer, max(graph[i]))
+    for j in range(M):
+        if visited[i][j] == 0: 
+            print(-1)
+            exit()
+        answer = max(visited[i][j] -1, answer)
 
 print(answer)
