@@ -1,5 +1,5 @@
 # 토마토
-# 복습 횟수:3, 00:30:00, 복습 필요
+# 복습 횟수:3, 00:30:00, 복습 필요X
 import sys
 from collections import deque
 si = sys.stdin.readline
