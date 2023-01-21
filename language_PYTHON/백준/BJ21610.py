@@ -1,86 +1,91 @@
 # 마법사 상어와 비바라기
-from shutil import move
+# 복습 횟수:2, 02:00:00
 import sys
 si = sys.stdin.readline
 
 N, M = map(int, si().split())
 graph = []
-dir = [0, (0,-1), (-1,-1), (-1,0), (-1,1), (0,1), (1,1), (1,0), (1,-1)]
-command = []
-# 그래프 만들기
+move = []
+dir = [(0, -1), (-1, -1), (-1, 0), (-1, 1), (0, 1), (1, 1), (1, 0), (1, -1)]
+dir2 = [(-1, -1), (-1, 1), (1, -1), (1, 1)]
+
 for i in range(N):
-    graph.append(list(map(int, si().split())))
-# 커맨드
+    tmp = list(map(int, si().split()))
+    graph.append(tmp)
+
 for i in range(M):
-    command.append(list(map(int, si().split())))
+    tmp = list(map(int ,si().split()))
+    move.append(tmp)
 
-cloud_location = [(N-2, 0), (N-2, 1), (N-1, 0), (N-1, 1)]
+def changeLocation(tmp_list : list):
+    while tmp_list[0] >= N:
+        tmp_list[0] = tmp_list[0] - N
+    while tmp_list[1] >= N:
+        tmp_list[1] = tmp_list[1] - N
+    while tmp_list[0] < 0:
+        tmp_list[0] = tmp_list[0] + N
+    while tmp_list[1] < 0:
+        tmp_list[1] = tmp_list[1] + N
+        
+    return tmp_list
 
+def converter(cloud_list : list, turn, distance):
+    new_cloud_list = []
 
-def move_cloud(idx, distance, cloud_location):
-    tmp = []
+    while cloud_list:
+        x, y = cloud_list.pop()
+        new_x, new_y = x + dir[turn][0] * distance, y + dir[turn][1] * distance  
         
-    # dir[idx]
-    for cloud in cloud_location:
-        nx, ny = cloud[0] + (dir[idx][0] * (distance%N)), cloud[1] + (dir[idx][1] * (distance%N))
+        new_cloud = changeLocation([new_x, new_y])
+        new_cloud_list.append(new_cloud)
         
-        if nx < 0:
-            nx += N
-        elif nx >= N:
-            nx -= N
-        
-        if ny < 0:
-            ny += N
-        elif ny >= N:
-            ny -= N
-        
-        tmp.append((nx, ny))
-    return tmp
+    return new_cloud_list
+
+# move 시작
+cloud_list = [[N-1, 0], [N-1, 1], [N-2, 0], [N-2, 1]]
+for i in range(M):
+    # 구름 이동시키기
+    visited = [[0 for i in range(N)] for i in range(N)]
+    turn, distance = move[i][0] -1, move[i][1]
+    cloud_list = converter(cloud_list, turn, distance)
+
+    # 물 뿌리기
+    for cloud in cloud_list:
+        x, y = cloud
+        graph[x][y] = graph[x][y] + 1
+
+    # 대각선 체크하기
+    for cloud in cloud_list:
+        x, y = cloud
+        navi = []
+
+        for i in range(4):
+            nx, ny = x + dir2[i][0], y + dir2[i][1]
+            if not (0 <= nx < N and 0 <= ny < N): continue
+            
+            navi.append([nx, ny])
+
+        for nav in navi:
+            x2, y2 = nav
+            if graph[x2][y2] != 0:
+                graph[x][y] = graph[x][y] + 1
     
-
-for cmd in command:
-    idx, dist = cmd[0], cmd[1]
+    # 기존 구름 위치 체크
+    while cloud_list:
+        x, y = cloud_list.pop()
+        visited[x][y] = 1 # 방문처리
     
-    # 1 단계 - 구름 이동 시키기
-    after_cloud_location = move_cloud(idx, dist, cloud_location)
-    
-    # 2 단계 - 물 추가하기
-    for cloud in after_cloud_location:
-        x, y = cloud[0], cloud[1]
-        graph[x][y] += 1 # 1 추가하기
-    
-    # 3 단계 - 물 복사하기
-    for cloud in after_cloud_location:
-        x, y = cloud[0], cloud[1]
-        
-        # 상하좌우
-        for idx in range(2, 9, 2):
-            nx, ny = x + dir[idx][0], y + dir[idx][1]
-            if not (0<=nx<N and 0<=ny<N): continue # 범위밖 X
-
-            if graph[nx][ny] != 0: # 물이 있다면
-                graph[x][y] += 1 # 물 추가
-
-    # 4 단계 구름이 있었던 칸을 제외한 나머지 칸 중 물의 양이 2이상인 칸에 구름
-    # 4.1 구름 위치 체크
-    visited = [[0 for _ in range(N)] for _ in range(N)]
-
-    for cloud in after_cloud_location:
-        x, y = cloud[0], cloud[1]
-        visited[x][y] = 1 # 방문 처리
-
-    # 4.2 구름 위치 제외 후 물 양 2이면 구름 추가
-    cloud_location.clear() # 삭제!
+    # 물 넣기
     for i in range(N):
         for j in range(N):
-            if visited[i][j] == 1: continue # 구름 위치 제외
+            if visited[i][j] == 1: continue # 구름이 기존에 있던 자리는 제외한다
+            if graph[i][j] < 2: continue # 물의 양이 2 이상인 칸에 구름이 생긴다
 
-            if graph[i][j] >= 2:
-                cloud_location.append((i, j)) # 위치 추가
-                graph[i][j] -= 2 # 물의 양 2만큼 준다.
-    
+            cloud_list.append([i, j])
+            graph[i][j] = graph[i][j] - 2 # 구름이 생성되면 물의 양이 2만큼 줄어든다.
+
 answer = 0
-for i in range(N):
-    for j in range(N):
-        answer += graph[i][j]
+for i in graph:
+    answer += sum(i)
+
 print(answer)
