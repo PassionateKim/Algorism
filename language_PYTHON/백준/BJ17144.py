@@ -1,91 +1,128 @@
-# 미세먼지 안녕!
+# 미세먼지 안녕
+# 복습 횟수:2, 01:45:00, 복습필요O
 import sys
+from collections import deque
+si = sys.stdin.readline
 
-input = sys.stdin.readline
+N, M, T = map(int, si().split())
+graph = []
+dx = [-1, 1, 0, 0]
+dy = [0, 0, -1, 1]
 
-r, c, t = map(int, input().split())
+for i in range(N):
+    tmp = list(map(int, si().split()))
+    graph.append(tmp)
 
-arr = [list(map(int, input().split())) for _ in range(r)]
+for i in range(T):
+    cleaner = deque()
 
-up = -1
-down = -1
-# 공기 청정기 위치 찾기
-for i in range(r):
-    if arr[i][0] == -1:
-        up = i
-        down = i + 1
-        break
+    for i in range(N):
+        for j in range(M):
+            if graph[i][j] == -1:
+                cleaner.append([i, j])
 
-# 미세먼지 확산
-def spread():
-    dx = [-1, 0, 0, 1]
-    dy = [0, -1, 1, 0]
+    # 1. 확산
+    tmp_graph = [[0 for i in range(M)] for i in range(N)]
+    # 예외 - 공기청정기 위치는 불가능
+    for x in range(N):
+        for y in range(M):
+            if graph[x][y] < 5: continue # 어차피 확산되지 않으므로 continue
+            val = graph[x][y] // 5  # Ar,c/5이고 소수점은 버린다.
+            cnt = 0
+            # 상하 좌우
+            for idx in range(4):
+                nx, ny = x + dx[idx], y + dy[idx]
+                if not (0 <= nx < N and 0 <= ny < M): continue
+                if graph[nx][ny] == -1: continue # 공기청정기라면
 
-    tmp_arr = [[0] * c for _ in range(r)]
-    for i in range(r):
-        for j in range(c):
-            if arr[i][j] != 0 and arr[i][j] != -1:
-                tmp = 0
-                for k in range(4):
-                    nx = dx[k] + i
-                    ny = dy[k] + j
-                    if 0 <= nx < r and 0 <= ny < c and arr[nx][ny] != -1:
-                        tmp_arr[nx][ny] += arr[i][j] // 5
-                        tmp += arr[i][j] // 5
-                arr[i][j] -= tmp
+                cnt += 1
+                tmp_graph[nx][ny] += val
+            
+            graph[x][y] = graph[x][y] - (cnt * val)
+    # 초기화
+    for i in range(N):
+        for j in range(M):
+            graph[i][j] = graph[i][j] + tmp_graph[i][j]
+    
+    # 2. 이동
+    # 2-1 상부
+    cleaner_x, cleaner_y = cleaner.popleft()
+    q = deque()
+    # 좌 -> 우
+    for i in range(cleaner_y+1, M):
+        q.append(graph[cleaner_x][i])
 
-    for i in range(r):
-        for j in range(c):
-            arr[i][j] += tmp_arr[i][j]
+        if len(q) == 2:
+            tmp = q.popleft()
+            graph[cleaner_x][i] = tmp 
 
-# 공기청정기 위쪽 이동
-def air_up():
-    dx = [0, -1, 0, 1]
-    dy = [1, 0, -1, 0]
-    direct = 0
-    before = 0
-    x, y = up, 1
-    while True:
-        nx = x + dx[direct]
-        ny = y + dy[direct]
-        if x == up and y == 0:
-            break
-        if nx < 0 or nx >= r or ny < 0 or ny >= c:
-            direct += 1
-            continue
-        arr[x][y], before = before, arr[x][y]
-        x = nx
-        y = ny
+    # 우 -> 상
+    for i in range(cleaner_x-1, -1, -1):
+        q.append(graph[i][M-1])
 
-# 공기청정기 아래쪽 이동
-def air_down():
-    dx = [0, 1, 0, -1]
-    dy = [1, 0, -1, 0]
-    direct = 0
-    before = 0
-    x, y = down, 1
-    while True:
-        nx = x + dx[direct]
-        ny = y + dy[direct]
-        if x == down and y == 0:
-            break
-        if nx < 0 or nx >= r or ny < 0 or ny >= c:
-            direct += 1
-            continue
-        arr[x][y], before = before, arr[x][y]
-        x = nx
-        y = ny
+        if len(q) == 2:
+            tmp = q.popleft()
+            graph[i][M-1] = tmp 
 
+    # 상 -> 좌
+    for i in range(M-2, -1, -1):
+        q.append(graph[0][i])
 
-for _ in range(t):
-    spread()
-    air_up()
-    air_down()
+        if len(q) == 2:
+            tmp = q.popleft()
+            graph[0][i] = tmp 
+
+    #좌 -> 하
+    for i in range(1, cleaner_x):
+        q.append(graph[i][0])
+
+        if len(q) == 2:
+            tmp = q.popleft()
+            graph[i][0] = tmp
+
+    graph[cleaner_x][1] = 0
+
+    # 2-2 하부
+    cleaner_x, cleaner_y = cleaner.popleft()
+    q = deque()
+    # 좌 -> 우
+    for i in range(cleaner_y+1, M):
+        q.append(graph[cleaner_x][i])
+
+        if len(q) == 2:
+            tmp = q.popleft()
+            graph[cleaner_x][i] = tmp 
+
+    # 우 -> 하
+    for i in range(cleaner_x+1, N):
+        q.append(graph[i][M-1])
+
+        if len(q) == 2:
+            tmp = q.popleft()
+            graph[i][M-1] = tmp 
+
+    # 하 -> 좌
+    for i in range(M-2, -1, -1):
+        q.append(graph[N-1][i])
+
+        if len(q) == 2:
+            tmp = q.popleft()
+            graph[N-1][i] = tmp 
+
+    #좌 -> 상
+    for i in range(N-2, cleaner_x, -1):
+        q.append(graph[i][0])
+
+        if len(q) == 2:
+            tmp = q.popleft()
+            graph[i][0] = tmp
+
+    graph[cleaner_x][1] = 0
 
 answer = 0
-for i in range(r):
-    for j in range(c):
-        if arr[i][j] > 0:
-            answer += arr[i][j]
+for i in range(N):
+    for j in range(M):
+        if graph[i][j] == -1: continue
+        answer += graph[i][j]
 
 print(answer)
