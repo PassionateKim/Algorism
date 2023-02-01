@@ -1,7 +1,5 @@
 # 오목
-# 복습 횟수:2, 
-# 1. 바둑판 세팅
-# 2. 가로 ->  , 대각 2개, 세로 아래
+# 복습 횟수:2, 00:45:00, 복습필요X
 import sys
 si = sys.stdin.readline
 graph = []
@@ -115,3 +113,4 @@ for x in range(19):
             print(check)
             print(q[0][0] + 1, q[0][1] + 1)
             exit()
+print(0)
