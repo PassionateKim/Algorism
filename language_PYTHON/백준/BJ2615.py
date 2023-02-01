@@ -1,64 +1,117 @@
 # 오목
-from calendar import c
+# 복습 횟수:2, 
+# 1. 바둑판 세팅
+# 2. 가로 ->  , 대각 2개, 세로 아래
 import sys
 si = sys.stdin.readline
-
 graph = []
 for i in range(19):
-    graph.append(list(map(int, si().split())))
-# <-
-dir = [(0,-1), (-1,-1), (-1,0), (-1,1), (0,1), (1,1), (1,0), (1,-1)]
-answer = 0
-omok = []
+    tmp = list(map(int, si().split()))
+    graph.append(tmp)
 
-def checkOmok(x, y):
-    global answer
-    color = graph[x][y]
-    for i in range(8):
-        cnt = 1
-        omok.append((x, y))
-        nx, ny = x, y
-        while True:
-            nx += dir[i][0]
-            ny += dir[i][1]
-            if not (0<=nx<19 and 0<=ny<19): 
-                omok.clear()
-                break
+for x in range(19):
+    for y in range(19):
+        check = graph[x][y]
+        # black
+        if check == 0: continue 
+        # 가로 
+        q = list()
+        q.append([x, y]) # 좌표 저장
+        rx, ry = x, y 
+        lx, ly = x, y
+        while 0 <= ly < 19:
+            ly = ly - 1 # 좌측
+            if 0 <= ly < 19 and graph[lx][ly] == check:
+                q.append([lx, ly])
+            else: break
+        
+        while 0 <= ry < 19:
+            ry = ry + 1 # 우측
+            if 0 <= ry < 19 and graph[rx][ry] == check:
+                q.append([rx, ry])
+            else: break
+        
+        if len(q) >= 6: continue #6알 이상인 경우는 이긴 것이 아니다
+        elif len(q) == 5:
+            q.sort(key=lambda x: (x[1], x[0]))
+            print(check)
+            print(q[0][0] + 1, q[0][1] + 1)
+            exit()
+        
+        # 대각 위
+        q = list()
+        q.append([x, y])
+        rx, ry = x, y
+        lx, ly = x, y
+        while 0 <= lx < 19 and 0 <= ly < 19: # 아래측
+            lx = lx + 1
+            ly = ly - 1
+            if 0 <= lx < 19 and 0 <= ly < 19 and graph[lx][ly] == check:
+                q.append([lx, ly])
+            else: break
 
-            if graph[nx][ny] == color: # 흰 오목이라면
-                omok.append((nx, ny))
-                cnt += 1
-            else:
-                omok.clear()
-                break
+        while 0 <= rx < 19 and 0 <= ry < 19: # 위측
+            rx = rx - 1
+            ry = ry + 1 
+            if 0 <= rx < 19 and 0 <= ry < 19 and graph[rx][ry] == check:
+                q.append([rx, ry])       
+            else: break
+        
+        if len(q) >= 6: continue #6알 이상인 경우는 이긴 것이 아니다
+        elif len(q) == 5:
+            q.sort(key=lambda x: (x[1], x[0]))
+            print(check)
+            print(q[0][0] + 1, q[0][1] + 1)
+            exit()
+        
+        # 대각 아래
+        q = list()
+        q.append([x, y])
+        rx, ry = x, y
+        lx, ly = x, y
 
-            # 탈출 조건 딱 5개라면
-            if cnt == 5:
-                fnx, fny = nx + dir[i][0], ny + dir[i][1] 
-                bnx, bny = x - dir[i][0], y - dir[i][1] 
-                if (0<=fnx<19 and 0<=fny<19 and graph[fnx][fny] == color):
-                    break
-                if (0<=bnx<19 and 0<=bny<19 and graph[bnx][bny] == color):
-                    break
-                answer = color
-                print(answer)
-                omok.sort(key=lambda x: (x[1], x[0]))
-                print(omok[0][0]+1, omok[0][1]+1)
-                sys.exit(0)          
-                # else:
-                #     omok.clear()
-                #     break
-                
-    return
+        while 0 <= lx < 19 and 0 <= ly < 19: # 아래측
+            lx = lx + 1
+            ly = ly + 1
+            if 0 <= lx < 19 and 0 <= ly < 19 and graph[lx][ly] == check:
+                q.append([lx, ly])
+            else: break
 
-# 완전 탐색
-def check():
-    global answer
-    for i in range(19):
-        for j in range(19):
-            if graph[i][j] != 0: 
-                checkOmok(i, j)
-            
-    return
-check()
-print(0)
+        while 0 <= rx < 19 and 0 <= ry < 19: # 위측
+            rx = rx - 1
+            ry = ry - 1 
+            if 0 <= rx < 19 and 0 <= ry < 19 and graph[rx][ry] == check:
+                q.append([rx, ry])       
+            else: break
+        
+        if len(q) >= 6: continue #6알 이상인 경우는 이긴 것이 아니다
+        elif len(q) == 5:
+            q.sort(key=lambda x: (x[1], x[0]))
+            print(check)
+            print(q[0][0] + 1, q[0][1] + 1)
+            exit()
+        
+        # 세로
+        q = list()
+        q.append([x, y])
+        rx, ry = x, y
+        lx, ly = x, y
+
+        while 0 <= lx < 19: # 아래측
+            lx = lx + 1
+            if 0 <= lx < 19 and graph[lx][ly] == check:
+                q.append([lx, ly])
+            else: break
+        
+        while 0 <= rx < 19: # 위측
+            rx = rx - 1
+            if 0 <= rx < 19 and graph[rx][ry] == check:
+                q.append([rx, ry])
+            else: break
+        
+        if len(q) >= 6: continue #6알 이상인 경우는 이긴 것이 아니다
+        elif len(q) == 5:
+            q.sort(key=lambda x: (x[1], x[0]))
+            print(check)
+            print(q[0][0] + 1, q[0][1] + 1)
+            exit()
