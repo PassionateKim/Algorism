@@ -1,7 +1,6 @@
 # 선분 위의 점
-# 복습 횟수:0, 02:45:00, 복습필요:O
+# 복습 횟수:1, 01:00:00, 복습필요:O
 import sys
-from bisect import bisect_left, bisect_right
 si = sys.stdin.readline
 N, M = map(int, si().split())
 point_list = list(map(int, si().split()))
@@ -41,4 +40,4 @@ for least, largest in line_list:
     mini = binary_min(start, end, least)
     maxi = binary_max(start, end, largest)
 
-    print(maxi,mini)
+    print(maxi-mini)
