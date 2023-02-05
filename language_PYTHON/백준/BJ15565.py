@@ -1,6 +1,5 @@
 # 귀여운 라이언
 # 복습 횟수:1, 01:00:00, 복습필요O
-# ====오답 코드====#
 import sys
 si = sys.stdin.readline
 N, K = map(int, si().split())
