@@ -1,121 +1,110 @@
 # 캐슬 디펜스
-# 복습 횟수:1, 01:30:00, 복습필요O
+# 복습 횟수:2, 01:00:00, 복습필요O
 import sys
+import copy
 from itertools import combinations
 si = sys.stdin.readline
-
 N, M, D = map(int, si().split())
-main_graph = []
 
+can_graph = []
 for i in range(N):
-    tmp = list(map(int, si().split()))
-    main_graph.append(tmp)
+    can_graph.append(list(map(int, si().split())))
 
+archor_combi = list(combinations(range(M), 3))
 answer = 0
-archor_list = list(combinations(range(M), 3))
+for arch1, arch2, arch3 in archor_combi:
+    graph = copy.deepcopy(can_graph)
 
-for archor in archor_list:
     tmp = 0
-    archor1, archor2, archor3 = archor
-    cnt = 0
-    graph = [[0 for _ in range(M)] for __ in range(N)]
-    for i in range(N):
-        for j in range(M):
-            graph[i][j] = main_graph[i][j]
-
-    while True:
-        mob_set = set() # 중복 가능하므로
-
-        if cnt > N: break
-        # archor 1
+    while True: 
+        enemy_list = dict()
+        # 탈출 조건
+        check = 1
+        for i in range(N):
+            for j in range(M):
+                if graph[i][j] == 1:
+                    check = 0
+        if check:
+            break
+        
         flag = 0
-        for d in range(1, D+1):
+        # arch1
+        for distance in range(1, D+1): # 1, 2, 3
+            x, y = N, arch1 - distance
             diff = -1
-            x = N
-            y = archor1 - d
-            # 궁수가 쏘는 mob 위치 탐색
-            for i in range(d*2-1):
-                if x == N-d:
+            for d in range(distance * 2 - 1): # 맨해튼 거리로 풀기
+                if x == N - (distance):
                     diff = 1
 
-                x = x + diff 
+                x = x + diff
                 y = y + 1
-                if not (0 <= x < N and 0 <= y < M): continue # 범위밖은 생략
-                if graph[x][y] == 0: continue # mob 없으면 생략
 
-                if graph[x][y] == 1: # mob이 있다면
-                    mob_set.add((x, y))
+                if not (0 <= x < N and 0 <= y < M): continue # 범위 밖은 out
+
+                if graph[x][y] == 1: #적이라면 쏜다
+                    enemy_list[(x, y)] = 1
                     flag = 1
                 
                 if flag:
                     break
             if flag:
                 break
-
-        # archor 2
-        flag = 0
-        for d in range(1, D+1):
+        
+        flag = 0    
+        # arch2
+        for distance in range(1, D+1): # 1, 2, 3
+            x, y = N, arch2 - distance
             diff = -1
-            x = N
-            y = archor2 - d
-            # 궁수가 쏘는 mob 위치 탐색
-            for i in range(d*2-1):
-                if x == N-d:
+            for d in range(distance * 2 - 1): # 맨해튼 거리로 풀기
+                if x == N - (distance):
                     diff = 1
 
-                x = x + diff 
+                x = x + diff
                 y = y + 1
 
-                if not (0 <= x < N and 0 <= y < M): continue # 범위밖은 생략
-                if graph[x][y] == 0: continue # mob 없으면 생
+                if not (0 <= x < N and 0 <= y < M): continue # 범위 밖은 out
 
-                if graph[x][y] == 1: # mob이 있다면
-                    mob_set.add((x, y))
+                if graph[x][y] == 1: #적이라면 쏜다
+                    enemy_list[(x, y)] = 1
                     flag = 1
                 
                 if flag:
                     break
             if flag:
                 break
-
-        # archor 3
+        
         flag = 0
-        for d in range(1, D+1):
+        # arch3
+        for distance in range(1, D+1): # 1, 2, 3
+            x, y = N, arch3 - distance
             diff = -1
-            x = N
-            y = archor3 - d
-            # 궁수가 쏘는 mob 위치 탐색
-            for i in range(d*2-1):
-                if x == N-d:
+            for d in range(distance * 2 - 1): # 맨해튼 거리로 풀기
+                if x == N - (distance):
                     diff = 1
 
-                x = x + diff 
+                x = x + diff
                 y = y + 1
 
-                if not (0 <= x < N and 0 <= y < M): continue # 범위밖은 생략
-                if graph[x][y] == 0: continue # mob 없으면 생
+                if not (0 <= x < N and 0 <= y < M): continue # 범위 밖은 out
 
-                if graph[x][y] == 1: # mob이 있다면
-                    mob_set.add((x, y))
+                if graph[x][y] == 1: #적이라면 쏜다
+                    enemy_list[(x, y)] = 1
                     flag = 1
                 
                 if flag:
                     break
             if flag:
                 break
-        # mob 제거하기
-        while mob_set:
-            x, y = mob_set.pop()
+        
+        for x, y in enemy_list.keys():
             tmp += 1
-            graph[x][y] = 0
-
-        # 한 칸 내리기
+            graph[x][y] = 0 # 죽이기
+        
         for i in range(N-2, -1, -1):
             graph[i+1] = graph[i]
-        
-        graph[0] = [0] * M
-        cnt += 1
 
-    answer = max(answer ,tmp)
-    
+        graph[0] = [0] * M
+
+    answer = max(answer, tmp)
+
 print(answer)
