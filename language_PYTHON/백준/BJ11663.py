@@ -1,5 +1,5 @@
 # 선분 위의 점
-# 복습 횟수:1, 01:00:00, 복습필요:O
+# 복습 횟수:2, 01:00:00, 복습필요:O
 import sys
 si = sys.stdin.readline
 N, M = map(int, si().split())
@@ -8,36 +8,32 @@ point_list.sort()
 
 line_list = []
 for i in range(M):
-    line = list(map(int, si().split()))
-    line_list.append(line)
+    tmp = list(map(int, si().split()))
+    line_list.append(tmp)
 
-def binary_min(start, end, target):
+def bisect_left(start, end, target):
     while start <= end:
-        idx = (start + end) // 2
-        mid = point_list[idx]
-        
-        if target > mid:
-            start = idx + 1
-        else:
-            end = idx - 1
-    return start 
+        mid = (start + end) // 2
 
-def binary_max(start, end, target):
-    while start <= end:
-        idx = (start + end) // 2
-        mid = point_list[idx]
-
-        if target >= mid:
-            start = idx + 1 
+        if point_list[mid] >= target:
+            end = mid - 1
         else:
-            end = idx - 1
+            start = mid + 1
+
     return start
 
-# 최소값의 index와 최대값의 index를 비교하는 방법으로 문제를 해결하기
-for least, largest in line_list:
-    start = 0 # index
-    end = len(point_list) - 1 # index
-    mini = binary_min(start, end, least)
-    maxi = binary_max(start, end, largest)
+def bisect_right(start, end, target):
+    while start <= end:
+        mid = (start + end) // 2
 
-    print(maxi-mini)
+        if point_list[mid] > target:
+            end = mid - 1
+        else:
+            start = mid + 1
+    
+    return end
+
+for left, right in line_list:
+    least = bisect_left(0, len(point_list)-1, left)
+    largest = bisect_right(0, len(point_list)-1, right)
+    print(largest - least + 1)
