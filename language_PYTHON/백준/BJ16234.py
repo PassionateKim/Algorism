@@ -1,68 +1,73 @@
 # 인구 이동
+# 복습 횟수:2, 01:30:00
 import sys
 from collections import deque
 si = sys.stdin.readline
-
 N, L, R = map(int, si().split())
-# 상하좌우
-dx = [-1,1,0,0]
-dy = [0,0,-1,1]
-
-graph = [] # 이차원 배열 사용
-
-# 인구 넣기
+dx = [-1, 1, 0, 0]
+dy = [0, 0, -1, 1]
+graph = []
 for i in range(N):
-    tmp = list(map(int, si().split()))
-    graph.append(tmp)
-    
-def bfs(i,j):
-    global total, flag
+    graph.append(list(map(int, si().split())))
+
+def bfs(x, y, cnt, visited :list, check):
     q = deque()
-    q.append((i,j))
+    q.append([x, y])
+    visited[x][y] = cnt # 방문처리
 
     while q:
         x, y = q.popleft()
-        for i in range(4):
-            nx, ny = x + dx[i], y + dy[i]
-            
-            if not (0<= nx <N and 0<= ny <N): continue
-            if visited[nx][ny] == 1: continue
+        for idx in range(4):
+            nx, ny = x + dx[idx], y + dy[idx]
+            if not (0 <= nx < N and 0 <= ny < N): continue 
+            if visited[nx][ny] != 0: continue 
 
-            if L<= abs(graph[x][y] - graph[nx][ny]) <=R:
-                visited[nx][ny] = 1 # 방문처리
-                flag = 1
-                arr.append((nx, ny))
-                q.append((nx, ny))
-                total += graph[nx][ny]
-    return
+            if L <= abs(graph[nx][ny] - graph[x][y]) <= R:
+                visited[nx][ny] = cnt
+                q.append([nx, ny])
+                check += 1
 
+    if check == 0:
+        return -1
 
-day = 0
-arr = []
+    return 1
+answer = 0
 while True:
-    visited = [[0 for _ in range(N)] for _ in range(N)] 
-    flag = 0
-
+    visited = [[0 for i in range(N)] for i in range(N)]
+    # 연합 구성하기
+    cnt = 1
     for i in range(N):
         for j in range(N):
-            if visited[i][j] == 0: # 방문하지 않은 경우만
-                visited[i][j] = 1 # 방문처리
-                # 초기화
-                total = graph[i][j]
-                arr = [(i, j)]
-                bfs(i,j)
-
-                # 연합의 값 초기화 하기
-                if len(arr) > 1: # 연합이 있는 경우
-                    averi = total // len(arr)
-                    while arr:
-                        x, y = arr.pop()
-                        graph[x][y] = averi
+            if visited[i][j] != 0: continue # 방문한 곳은 패스
     
-    if flag == 0:
+            flag = bfs(i, j, cnt, visited, 0)
+            if flag == 1:
+                cnt += 1
+            else: 
+                visited[i][j] = -1 # -1로 방문처리 
+    flag = 1
+    for i in range(N):
+        for j in range(N):
+            if visited[i][j] != -1:
+                flag = 0
+    if flag:
+        print(answer)
         break
     else:
-        day += 1
-
-print(day)
-
+        answer += 1
+    # 초기화 해주기
+    for idx in range(1, cnt):
+        team = []
+        for i in range(N):
+            for j in range(N):
+                if visited[i][j] == idx:
+                    team.append([i, j, graph[i][j]])
+        divider = len(team)
+        sumi = 0 
+        for x, y, val in team:
+            sumi += val
+        
+        init = sumi // divider
+        # 초기화하기
+        for x, y, val in team:
+            graph[x][y] = init
