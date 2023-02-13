@@ -1,46 +1,30 @@
 # 선발 명단
-# 복습 횟수:0, 00:45:00
+# 복습 횟수:1, 00:30:00, 복습 필요X
 import sys
 si = sys.stdin.readline
-
 N = int(si())
 
-def dfs(hang, choice, visited):
+def dfs(current):
     global answer
-    # 탈출 조건
-    if hang == 11:
-        if 0 in choice:
-            return
-        
-        # 전체의 값
-        tmp = 0
-        for i in range(len(choice)):
-            tmp += choice[i][1]
-        
-        answer = max(answer, tmp)
+    if current == 11:
+        sumi = 0
+        for location, val in visited:
+            sumi += val
+        answer = max(answer, sumi)
         return
-    
-    for i in range(11):
-        if visited[i] != 0: continue
-        if graph[hang][i] == 0: continue
 
-        choice[i] = [hang, graph[hang][i]]
-        visited[i] = 1 # 방문처리
-        dfs(hang+1, choice, visited)
-        visited[i] = 0 # 초기화
-        choice[i] = 0
+    for i in range(11):
+        if visited[i] == 0 and graph[current][i] != 0:
+            visited[i] = [current, graph[current][i]]
+            dfs(current + 1)
+            visited[i] = 0 # 초기화
 
     return
 
 for i in range(N):
-    # 초기화 
-    
     answer = 0
-    visited = [0 for i in range(11)]  
-    graph = []
-    for i in range(11):
-        tmp = list(map(int, si().split()))
-        graph.append(tmp)
-    
-    dfs(0, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], visited)
+    graph = [list(map(int, si().split())) for _ in range(11)]
+    visited = [0 for _ in range(11)]
+
+    dfs(0)
     print(answer)
