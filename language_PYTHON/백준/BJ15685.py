@@ -1,70 +1,73 @@
-# 2022-07-22
-# 2022-07-28
 # 드래곤 커브
+# 복습 횟수:2, 01:45:00, 복습필요X
 import sys
+from collections import deque
 si = sys.stdin.readline
-
 N = int(si())
-graph = [[0 for _ in range(101)] for _ in range(101)]
-dragon_li = [list(map(int, si().split())) for _ in range(N)]
-dir = [(0,1), (-1,0), (0,-1), (1,0)]
 
-while dragon_li:
-    y, x, d, g = dragon_li.pop() # 기존 그래프문제처럼 x, y 좌표를 둔다
-    arr = [[x,y]]
-    # 0 세대
+graph = [[0 for _ in range(101)] for __ in range(101)]
+dragon_list = deque()
+
+for i in range(N):
+    tmp = list(map(int, si().split()))
+    dragon_list.append(tmp)
+
+def initDragonList(x, y, d, q: deque):
     if d == 0:
-        arr.append([x, y+1])
+        graph[x][y+1] = 1 # 방문처리
+        q.append([x, y+1, d])
     elif d == 1:
-        arr.append([x-1,y])
+        graph[x-1][y] = 1 # 방문처리
+        q.append([x-1, y, d])
     elif d == 2:
-        arr.append([x, y-1])
-    else:
-        arr.append([x+1,y])
-    
-    # 1세대 ~ g세대
-    for i in range(1, g+1):
-        arr2 = []
-        arr2.extend(arr) # arr 초기화
+        graph[x][y-1] = 1
+        q.append([x, y-1, d])
+    else: # d == 3:
+        graph[x+1][y] = 1 
+        q.append([x+1, y, d])
+    return
 
-        end_x, end_y = arr.pop()
+def converter(q: deque):
+    for i in range(len(q)-1, 0, -1):
+        x, y = q[-1][0], q[-1][1] # 좌표는 끝점을 기준으로
+        dir = q[i][2] # 방향은 i를 기준으로
         
-        while arr:
-            cx, cy = arr.pop()
-            dx, dy = end_x - cx, end_y - cy
-            
-            if dy != 0:
-                dy = -dy
-            if dx != 0:
-                pass
+        if dir == 0: # 좌 -> 우 이므로
+            q.append([x-1, y, 1])
+            graph[x-1][y] = 1 # 방문처리
+        elif dir == 1: # 하 -> 상 이므로
+            q.append([x, y-1, 2])
+            graph[x][y-1] = 1 # 방문처리
+        elif dir == 2: # 우 -> 좌 이므로
+            q.append([x+1, y, 3])
+            graph[x+1][y] = 1 # 방문처리
+        else: # dir == 3: # 상 -> 하 이므로
+            q.append([x, y+1, 0])
+            graph[x][y+1] = 1 # 방문처리
 
-            dx, dy = dy, dx # 바꾸기
-            new_x, new_y = arr2[-1][0] + dx, arr2[-1][1] + dy
-            arr2.append([new_x, new_y])
-            # end_x, end_y 바꿔주기
-            end_x, end_y = cx, cy
-        #/arr
-        arr.extend(arr2) # arr 초기화
+    return
 
-    #/1세대 ~ g세대
-    while arr:
-        x, y = arr.pop()
-        graph[x][y] = 1 # 체크
+while dragon_list:
+    y, x, d, g = dragon_list.pop() # 편의상 y, x 스왑
+    q = deque()
+    q.append([x, y, d])
+    graph[x][y] = 1 # 방문처리
+    initDragonList(x, y, d, q) # 0세대 초기화
 
-#/dragon_li
+    for i in range(g):
+        converter(q)
+
 answer = 0
-dir2 = [(0,1), (1,0), (1,1)]
-for i in range(100):
-    for j in range(100):
-        if graph[i][j] == 1:
-            cnt = 1
-            for z in range(3):
-                nx, ny = i + dir2[z][0], j + dir2[z][1]
-                if graph[nx][ny] == 1:
-                    cnt += 1
-            if cnt == 4:
-                answer += 1
+dir = [(0, 0), (0, 1), (1, 0), (1, 1)]
+for x in range(100):
+    for y in range(100):
+        tmp = 0
+        for idx in range(4):
+            nx, ny = x + dir[idx][0], y + dir[idx][1]
+            if graph[nx][ny] == 1:
+                tmp += 1
+        
+        if tmp == 4: # 정사각형이므로
+            answer += 1
+
 print(answer)
-            
-
-
