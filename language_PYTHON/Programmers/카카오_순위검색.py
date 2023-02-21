@@ -1,50 +1,61 @@
-# 2022-08-16
-# 2022-08-17
-# 2022-08-19
-# 2022-08-30
 # 순위검색
-from bisect import bisect_left
-from collections import defaultdict
+# 복습 횟수:4, 00:45:00, 복습필요X
 from itertools import combinations
-
+from collections import defaultdict
+from bisect import bisect_left
 
 def solution(information, queries):
     answer = []
-    candidate_dict = defaultdict(list)
-    # 1. candidate_dict 만들기
+    # 미리 만들고 시작하기
+    info_dict = defaultdict(list)
+
     for info in information:
         info = info.split()
-        key_list = info[:-1]
         
-        score = int(info[-1])
+        for cnt in range(5):
+            combi_s = list(combinations(range(4), cnt))
+            for combi in combi_s:
+                key = ""
+                if 0 in combi:
+                    key += info[0]
+                else:
+                    key += '-'
 
-        c = [i for i in range(len(key_list))]
-        for i in range(len(key_list) + 1):
-            combi_list = list(combinations(c, i))
-            for combi in combi_list:
-                tmp = key_list[:]
-                for idx in combi:
-                    tmp[idx] = '-'
-                candidate_dict["".join(tmp)].append(score)
-    
-    # 2. candidate_dict 정렬하기
-    for value in candidate_dict.values():
+                if 1 in combi:
+                    key += info[1]
+                else:
+                    key += '-'
+
+                if 2 in combi:
+                    key += info[2]
+                else:
+                    key += '-'
+
+                if 3 in combi:
+                    key += info[3]
+                else:
+                    key += '-'
+                
+                info_dict[key].append(int(info[4]))              
+
+    for value in info_dict.values():
         value.sort()
     
-    # 3. 이분탐색으로 개수구하기
+    
+    # query 판단하기
     for query in queries:
-        query = query.replace("and","")
         query = query.split()
-        key_list = query[:-1]
-        key = "".join(key_list)
         score = int(query[-1])
-        
-        if key in candidate_dict.keys():
-            count = 0
-            val = len(candidate_dict[key]) - bisect_left(candidate_dict[key], score)
-            print(val)
-    exit()
 
+        key = ""
+        for i in range(0, len(query), 2):
+            key += query[i]
+        
+        val = info_dict[key]
+
+        idx = bisect_left(val, score)
+        answer.append(len(val) - idx)
+    
     return answer
 
 solution(["java backend junior pizza 150","python frontend senior chicken 210","python frontend senior chicken 150","cpp backend senior pizza 260","java backend junior chicken 80","python backend senior chicken 50"],
