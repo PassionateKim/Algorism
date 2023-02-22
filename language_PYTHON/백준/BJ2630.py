@@ -1,32 +1,30 @@
 # 색종이 만들기
+# 복습 횟수:3, 00:30:00, 복습필요X
 import sys
 si = sys.stdin.readline
-
 N = int(si())
+graph = [list(map(int, si().split())) for i in range(N)]
 
-graph = []
-# graph 생성하기
-for i in range(N):
-    tmp = list(map(int, si().split()))
-    graph.append(tmp)
-white, blue = 0, 0
+white = 0
+blue = 0
+
 
 def dfs(x, y, n):
-    global white, blue
+    global white
+    global blue
 
-    check_point = graph[x][y]
-    
+    check = graph[x][y]
+
     for i in range(x, x + n):
         for j in range(y, y + n):
-            # 다르면 분할 정복
-            if graph[i][j] != check_point:
+            if graph[i][j] != check: # 다른 경우
                 dfs(x, y, n//2)
                 dfs(x, y + n//2, n//2)
                 dfs(x + n//2, y, n//2)
                 dfs(x + n//2, y + n//2, n//2)
                 return
-
-    if check_point == 0:
+    
+    if check == 0:
         white += 1
     else:
         blue += 1
