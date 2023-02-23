@@ -1,45 +1,55 @@
-from collections import deque
+# DFS와 BFS
+# 복습 횟수:3, 00:30:00, 복습필요X
 import sys
+from collections import deque
 si = sys.stdin.readline
-answer = []
+
 N, M, V = map(int, si().split())
-graph = [[] for i in range(N+1)]
-visited = [0] * (N+1)
 
-# 값 넣기
+graph = [[] for i in range(N+1)] 
+
 for i in range(M):
-    a, b = map(int, si().split())
-    graph[a].append(b)
-    graph[b].append(a)
+    x, y = map(int, si().split())
+    graph[x].append(y)
+    graph[y].append(x)
 
-# 정렬
-for i in range(1, N+1):
-    graph[i].sort()
+for val in graph:
+    val.sort()
 
-def dfs(value):
-    visited[value] = 1 # 방문처리
-    answer.append(value)
+li = []
+visited = [0 for i in range(N+1)]
+def dfs(start):
+    visited[start] = 1 # 방문 처리
+    li.append(start)
 
-    for i in graph[value]:
-        if visited[i] == 0: # 방문 안한 경우에만
-            dfs(i)
+    for val in graph[start]:
+        if visited[val] == 1: continue
+        
+        dfs(val)
+
+    return
 
 dfs(V)
-print(*answer)
-visited = [0] * (N+1)
-answer = []
+print(*li)
 
-
-def bfs(value):
+def bfs(start):
+    li = [start]
+    visited = [0] * (N+1)
+    visited[start] = 1 # 방문처리
+    
     q = deque()
-    q.append(value)
-    visited[value] = 1 # 방문처리
+    q.append(start)
     while q:
-        val = q.popleft()
-        answer.append(val)
-        for i in graph[val]:
-            if visited[i] == 0: # 방문이 아닌 경우에만
-                visited[i] = 1 # 방문처리
-                q.append(i)
-bfs(V)
-print(*answer)
+        idx = q.popleft()
+        for val in graph[idx]:
+            if visited[val] == 1: continue
+
+            q.append(val)
+            li.append(val)
+            visited[val] = 1 # 방문처리
+    
+    return li
+
+li = bfs(V)
+print(*li)
+
