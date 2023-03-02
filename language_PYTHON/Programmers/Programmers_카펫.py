@@ -1,26 +1,21 @@
-# 2022-08-25
 # 카펫
+# 복습 횟수:1, 00:15:00, 복습필요X
 def solution(brown, yellow):
-    # [가로, 세로]
     answer = []
-    # x>=3 y>=3 x>=y
-    candidate_list = list() 
-    # 1. 후보군 넣기
-    y = 3
-    x = brown//2 + 2 - y
-    
-    while x >= y:
-        candidate_list.append([x, y])
-        x -= 1
-        y += 1
+    sero = 1
+    while sero <= (yellow + 1) // 2:        
+        if yellow % sero == 0: # 나눠진다면
+            garo = yellow // sero
 
-    while candidate_list:
-        x, y = candidate_list.pop()
-        if (x-2) * (y-2) == yellow:
-            answer.append(x)
-            answer.append(y)
-            break
-    print(answer)
-    return answer
+            check = (sero + garo) * 2 + 4
+            if check == brown:
+                answer.append([garo+2, sero+2])
+                break
+        else:
+            pass
 
-solution(24, 24)
+        sero += 1
+
+    return answer[0]
+
+print(solution(8, 1))
