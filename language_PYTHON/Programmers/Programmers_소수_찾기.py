@@ -1,39 +1,54 @@
-# 2022-08-09
-# 2022-08-10
-# 2022-08-13
 # 소수 찾기
-from itertools import permutations
+# 복습 횟수:4, 00:45:00, 복습필요O
+from copy import deepcopy
+def dfs(numbers, li : list, cnt, number_list: set):
+    # 탈출조건
+    if len(li) == cnt:
+        tmp = deepcopy(li)
+        number_list.add(tuple(tmp))
+        return
+
+    for i in range(len(numbers)):
+        if visited[i] == 1: continue
+
+        li.append(numbers[i])
+        visited[i] = 1 # 방문처리
+        dfs(numbers, li, cnt, number_list)
+        li.pop()
+        visited[i] = 0 # 원상 복구
+
+    return
+
+def isPrime(val):
+    if val < 2:
+        return False
+    
+    for i in range(2, val):
+        if val % i == 0:
+            return False
+    
+    return True
 
 
 def solution(numbers):
-    def isPrime(val : int):
-        if val < 2:
-            return False
-
-        # 나눠지면 소수가 아니다.
-        for i in range(2, val):
-            if val % i == 0:
-                return False
-
-        return True
-    answer = set()    
-    for i in range(1, len(numbers) + 1):
-        per = list(permutations(numbers, i))
-        tmp = set()
-        # 중복 제거하기
-        for i in per:
-            tmp.add(i)
-        # 가능한 값 다 넣기
-        for tu in tmp:
-            string = ""
-            for j in range(len(tu)):
-                if j == 0 and tu[j] == '0': continue
-                string += tu[j]
-            
-            if string and isPrime(int(string)):
-                answer.add(int(string))
+    global visited
     
+    number_list = set()
+    numbers = list(map(str, numbers))
 
-    return len(answer)
+    for i in range(1, len(numbers)+1):
+        visited = [0 for _ in range(len(numbers))]
+        dfs(numbers, [], i,  number_list)
+    
+    # 구하기
+    result = set()
+    for number in number_list:
+        number = int("".join(number))
+        
+        
+        if isPrime(number):
+            result.add(number)
+    
+    return len(result)
 
 print(solution("17"))
