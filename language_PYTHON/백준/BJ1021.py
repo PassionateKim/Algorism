@@ -1,31 +1,37 @@
 #회전하는 큐
+# 복습 횟수:2,00:30:00, 복습필요O
 import sys
 from collections import deque
 si = sys.stdin.readline
 N, M = map(int, si().split())
+double_q = deque ()
 
-sequence = deque(map(int, si().split()))
-q = deque([i for i in range(1, N+1)])
+for i in range(1, N + 1):
+    double_q.append(i)
 
-cnt = 0
-
-for s in sequence:
-    if s == q[0]:
-        q.popleft()
+li = list(map(int, si().split()))
+answer = 0
+for val in li:
+    if double_q[0] == val:
+        double_q.popleft()
     else:
-        if q.index(s) <= len(q) // 2:
-            while True: # 왼쪽에 있는 걸 오른쪽으로 
-                q.append(q.popleft())
-                cnt += 1 
-                if s == q[0]:
-                    q.popleft()
+        left = double_q.index(val)
+        right = len(double_q) - left
+        if left <= right:
+            while True:
+                if double_q[0] == val:
+                    double_q.popleft()
                     break
-        else:
-            while True: # 오른쪽에 있는 걸 왼쪽으로
-                q.appendleft(q.pop())
-                cnt += 1
-                if s == q[0]:
-                    q.popleft()
+                tmp = double_q.popleft()
+                double_q.append(tmp)
+                answer += 1
+        else: # left > right:
+            while True:
+                if double_q[0] == val:
+                    double_q.popleft()
                     break
-    
-print(cnt)
+                tmp = double_q.pop()
+                double_q.appendleft(tmp)
+                answer += 1
+
+print(answer)
