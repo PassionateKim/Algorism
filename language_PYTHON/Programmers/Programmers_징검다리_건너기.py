@@ -1,26 +1,29 @@
-# 복습 횟수:0, 01:00:00, 복습필요O
+# 복습 횟수:1, 00:30:00, 복습필요O
 def solution(stones, k):
     answer = 0
-    left = 1
-    right = max(stones)
-    
-    while left <= right:
-        mid = (left + right) // 2
+
+    start = 1
+    end = max(stones)
+
+    while start <= end:
+        mid = (start + end) // 2
         count = 0
-        for stone in stones:
-            if stone - mid <= 0:
+
+        for s in stones:
+            if s - mid <= 0:
                 count += 1
             else:
                 count = 0
             
             if count == k:
                 break
+                
         
         if count >= k:
-            right = mid - 1
             answer = mid
+            end = mid - 1
         else:
-            left = mid + 1
+            start = mid + 1
 
     return answer
 
