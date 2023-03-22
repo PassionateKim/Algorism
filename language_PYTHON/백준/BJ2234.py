@@ -1,137 +1,119 @@
 # 성곽
-# 복습 횟수:0, 01:30:00, 복습필요O
+# 복습 횟수:1, 01:00:00, 복습필요O
 import sys
 from collections import defaultdict
 si = sys.stdin.readline
 
 M, N = map(int, si().split())
 graph = [list(map(int, si().split())) for _ in range(N)]
+visited = [[0 for _ in range(M)] for __ in range(N)]
 
- # 북남서동
-dx = [-1, 1, 0, 0]
-dy = [0, 0, -1, 1]
+# 남 동 북 서
+# graph 모양 치환
+for i in range(N):
+    for j in range(M):
+        info = bin(graph[i][j])[2:] # 이진수로 변환하는 함수
+        info = '0' * (4 - len(info)) + info # 자리수 맞춰주기
+        graph[i][j] = list(map(int, info))
 
-def checkWall(val):
-    if val == 0:
-        return [[-1, 0], [1, 0], [0, -1], [0, 1]]
-    # 벽: 서 -> 북 남 동
-    if val == 1:
-        return [[-1, 0], [1, 0], [0, 1]]
-    # 벽: 북 -> 남 서 동
-    if val == 2:
-        return [[1, 0], [0, -1], [0, 1]]
-    # 벽: 북, 서 -> 남, 동
-    if val == 3: 
-        return [[1, 0], [0, 1]]
-    # 벽: 동 -> 북, 남, 서
-    if val == 4:
-        return [[-1, 0], [1, 0], [0, -1]]
-    # 벽: 서, 동 -> 북, 남
-    if val == 5:
-        return [[-1, 0], [1, 0]]
-    # 벽: 북, 동 -> 남, 서
-    if val == 6:
-        return [[1, 0], [0, -1]]
-    # 벽: 서, 북, 동 -> 남
-    if val == 7:
-        return [[1, 0]]
-    # 벽: 남 -> 북, 서, 동
-    if val == 8:
-        return [[-1, 0], [0, -1], [0, 1]]
-    # 벽: 남, 서 -> 북, 동
-    if val == 9:
-        return [[-1, 0], [0, 1]]
-    # 벽: 남, 북 -> 서, 동
-    if val == 10:
-        return [[0, -1], [0, 1]]
-    # 벽: 남, 서, 북 -> 동
-    if val == 11:
-        return [[-1, 0], [0, 1]]
-    # 벽: 남, 동 -> 북, 서
-    if val == 12:
-        return [[-1, 0], [0, -1]]
-    # 벽: 남, 서, 동 -> 북
-    if val == 13:
-        return [[-1, 0]]
-    # 벽: 남, 북, 동 -> 서
-    if val == 14: 
-        return [[0, -1]]
-    # 벽: 남, 서, 북, 동
-    if val == 15:
-        return []
+def getNewLocation(x, y, idx):
+    # 남쪽
+    if idx == 0:
+        return x+1, y
+    # 동쪽
+    if idx == 1:
+        return x, y+1
+    # 북쪽
+    if idx == 2:
+        return x-1, y 
+    # 서쪽
+    if idx == 3:
+        return x, y-1 
 
-# 다음 기준 벽이 있어서 동쪽으로 못가야하는데 현재 기준으로만 판단하므로
-# 오답 
+def changeDir(idx):
+    if idx == 0:
+        return 2
+    if idx == 1:
+        return 3
+    if idx == 2:
+        return 0
+    if idx == 3:
+        return 1
+    
 def dfs(x, y, check):
-    visited[x][y] = check # 방문처리
+    visited[x][y] = check # 방문 처리
 
-    val = graph[x][y]
-    wall_list = checkWall(val)
+    target = graph[x][y]
+    
+    for idx in range(4):
+        if target[idx] == 1: continue
 
-    for x_d, y_d in wall_list:
-        nx, ny = x + x_d, y + y_d
-
+        nx, ny = getNewLocation(x, y, idx)
         if not (0 <= nx < N and 0 <= ny < M): continue
         if visited[nx][ny] != 0: continue
-        
-        # 다음 벽 체크
-        next_wall_list = checkWall(graph[nx][ny])
-        # 없다면 벽이므로
-        if [-x_d, -y_d] not in next_wall_list: continue
 
-        dfs(nx, ny, check)    
+        # 가려는 방향의 벽도 체크해야함
+        next_target = graph[nx][ny]
+        dir = changeDir(idx)
+        if next_target[dir] == 1: continue
+
+        dfs(nx, ny, check)
 
     return
 
-visited = [[0 for _ in range(M)] for __ in range(N)]
-
 check = 1
-for x in range(N):
-    for y in range(M):
-        if visited[x][y] != 0: continue
+# 1. 방 나누기
+for i in range(N):
+    for j in range(M):
+        if visited[i][j] != 0: continue
 
-        dfs(x, y, check)
+        dfs(i, j, check)
         check += 1
 
-# 이방의 개수
-print(check-1) 
-
-# 방의 최대
-maxi_room_dict = defaultdict(int)
+print(check - 1)
+# 2. 가장 넓은 방의 넓이
+room_size_dict = defaultdict(int)
 
 for i in range(N):
     for j in range(M):
-        if visited[i][j] not in maxi_room_dict.keys():
-            maxi_room_dict[visited[i][j]] = 1
+        val = visited[i][j]
+
+        if val not in room_size_dict.keys():
+            room_size_dict[val] = 1
         else:
-            maxi_room_dict[visited[i][j]] += 1
+            room_size_dict[val] += 1
 
-print(max(maxi_room_dict.values()))
+print(max(room_size_dict.values()))
 
-# 차이나는 위치
+# 3. 하나의 벽을 제거하여 얻을 수 있는 가장 넓은 방의 크기
+maxi = max(room_size_dict.values())
 diff_set = set()
+
+dx = [-1, 1, 0, 0]
+dy = [0, 0, -1, 1]
 
 for x in range(N):
     for y in range(M):
-        first = visited[x][y]
+        check = visited[x][y]
+
         for idx in range(4):
             nx, ny = x + dx[idx], y + dy[idx]
 
             if not (0 <= nx < N and 0 <= ny < M): continue
 
-            if visited[nx][ny] != first:
-                tmp = [first, visited[nx][ny]]
+            if check != visited[nx][ny]:
+                tmp = [check, visited[nx][ny]]
                 tmp.sort()
-                tmp = tuple(tmp)
-                diff_set.add(tmp)
 
-maxi = max(maxi_room_dict.values())
+                diff_set.add(tuple(tmp))
 
-for first, second in diff_set:
+# 전체를 돌면서 합쳐지는 방 숫자를 가진 것의 총 개수 체크
+for x, y in diff_set:
     tmp = 0
-    for x in range(N):
-        for y in range(M):
-            if visited[x][y] == first or visited[x][y] == second:
+    for i in range(N):
+        for j in range(M):
+            if visited[i][j] == x or visited[i][j] == y:
                 tmp += 1
+    
     maxi = max(maxi, tmp)
 print(maxi)
