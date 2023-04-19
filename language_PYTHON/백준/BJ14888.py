@@ -1,35 +1,49 @@
 #연산자 끼워넣기
+# 복습 횟수:3, 00:30:00, 복습필요X
 import sys
 si = sys.stdin.readline
+maxi = -1 * sys.maxsize
+mini = sys.maxsize
 
 N = int(si())
-arr = list(map(int, si().split()))
-plus, minus, mul, div = map(int, si().split())
-sumi = arr[0]
-maxi = -1e6
-mini = 1e6
+li = list(map(int, si().split()))
+# 덧셈, 뺼셈, 곱셈, 나눗셈
+oper_list = list(map(int, si().split()))
 
-def dfs(plus, minus, mul, div, sumi, depth):
-    global maxi, mini
-    if plus + minus + mul + div == 0:
+def dfs(index, sumi):
+    global maxi
+    global mini
+    if index == N:
         maxi = max(maxi, sumi)
-        mini = min(mini, sumi)
+        mini = min(mini, sumi) 
+        return
+    
+    if oper_list[0]:
+        oper_list[0] -= 1
+        dfs(index + 1, sumi + li[index])
+        oper_list[0] += 1
+    
+    if oper_list[1]:
+        oper_list[1] -= 1
+        dfs(index + 1, sumi - li[index])
+        oper_list[1] += 1
+    
+    
+    if oper_list[2]:
+        oper_list[2] -= 1
+        dfs(index + 1, sumi * li[index])
+        oper_list[2] += 1
 
-    if plus:
-        dfs(plus-1, minus, mul, div, sumi+arr[depth+1], depth+1)
-    if minus:
-        dfs(plus, minus-1, mul, div, sumi-arr[depth+1], depth+1)
-    if mul:
-        dfs(plus, minus, mul-1, div, sumi*arr[depth+1], depth+1)
-    if div:
+    if oper_list[3]:
+        oper_list[3] -= 1
         if sumi < 0:
-            tmp = (-sumi // arr[depth+1]) * (-1)
+            tmp = (-sumi) // li[index]
+            tmp = -tmp
         else:
-            tmp = sumi//arr[depth+1]
+            tmp = sumi // li[index]
+        dfs(index + 1, tmp)
+        oper_list[3] += 1
 
-        dfs(plus, minus, mul, div-1, tmp, depth+1)
-            
-
-dfs(plus, minus, mul, div, sumi, 0)
+dfs(1, li[0])
 print(maxi)
 print(mini)
