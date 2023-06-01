@@ -1,96 +1,114 @@
 # 미네랄 
-# 복습 횟수:0, 01:00:00, 복습필요O
+# 복습 횟수:1, 01:00:00, 복습필요O
 from collections import deque
 import sys
+si = sys.stdin.readline
 
-input = sys.stdin.readline
-dx = [1, -1, 0, 0]
-dy = [0, 0, 1, -1]
+R, C = map(int, si().split())
+graph = [list(map(str, si().rstrip())) for _ in range(R)]
+dx = [-1, 1, 0, 0]
+dy = [0, 0, -1, 1]
 
-def destroy(i, left):
-    i, j = r - i, 0
-    if left == 1:
-        for k in range(c):
-            if a[i][k] == 'x':
-                a[i][k] = '.'
-                j = k
+N = int(si())
+height_list = list(map(int, si().split()))
+
+def check(who, height):
+    height = R - height
+
+    if who == 1:
+        for y in range(C):
+            if graph[height][y] == 'x':
+                r, c = height, y
+                graph[height][y] = '.'
                 break
+    
     else:
-        for k in range(c-1, -1, -1):
-            if a[i][k] == 'x':
-                a[i][k] = '.'
-                j = k
+        for y in range(C-1, -1, -1):
+            if graph[height][y] == 'x':
+                r, c = height, y
+                graph[height][y] = '.'
                 break
 
-    for k in range(4):
-        ni = i + dx[k]
-        nj = j + dy[k]
-        if 0 <= ni < r and 0 <= nj < c:
-            if a[ni][nj] == 'x':
-                dq.append([ni, nj])
+
+    if(r + c) != -2:
+        for idx in range(4):
+            nr, nc = r + dx[idx], c + dy[idx]
+            if not ( 0 <= nr < R and 0 <= nc < C): continue
+
+            if graph[nr][nc] == 'x':
+                candidate.append([nr, nc])
+    
+    return
+
 
 def bfs(x, y):
     q = deque()
-    check = [[0]*c for _ in range(r)]
-    fall_list = []
     q.append([x, y])
-    check[x][y] = 1
+    visited[x][y] = 1 # 방문 처리
+    fall_list = []
+
     while q:
         x, y = q.popleft()
-        if x == r-1:
+    
+        # x의 위치가 땅이라면 떨어질 수 없으므로 return
+        if x == R - 1:
             return
-        if a[x+1][y] == '.':
+
+        if graph[x+1][y] == '.':
             fall_list.append([x, y])
-        for i in range(4):
-            nx = x + dx[i]
-            ny = y + dy[i]
-            if 0 <= nx < r and 0 <= ny < c:
-                if a[nx][ny] == 'x' and not check[nx][ny]:
-                    check[nx][ny] = 1
-                    q.append([nx, ny])
+        
+        for idx in range(4):
+            nx, ny = x + dx[idx], y + dy[idx]
 
+            if not (0 <= nx < R and 0 <= ny < C): continue
 
-    fall(check, fall_list)
+            if visited[nx][ny] == 0 and graph[nx][ny] == 'x':
+                q.append([nx, ny])
+                visited[nx][ny] = 1 # 방문 처리
+    
+    fall(fall_list)
 
-def fall(check, fall_list):
-    k, flag = 1, 0
+    return
+
+def fall(fall_list):
+    k = 1
+    flag = 0
+    # 한칸씩 더 내려가며 최대 치를 체크한다.
     while True:
-        for i, j in fall_list:
-            if i + k == r-1: # 바닥
+        for x, y in fall_list:
+            if x + k == R - 1:
                 flag = 1
                 break
-            if a[i+k+1][j] == 'x' and not check[i+k+1][j]: # 다른 클러스터
+            
+            # cluster가 아니면서 벽인 경우
+            if graph[x + k + 1][y] == 'x' and visited[x + k + 1][y] == 0:
                 flag = 1
                 break
+        
         if flag:
             break
+
         k += 1
+    
+    for x in range(R-1, -1, -1):
+        for y in range(C):
+            if visited[x][y] == 1 and graph[x][y] == 'x':
+                graph[x][y] = '.'
+                graph[x+k][y] = 'x'
+    
+    return
 
-    for i in range(r-2, -1, -1):
-        for j in range(c):
-            if a[i][j] == 'x' and check[i][j]:
-                a[i][j] = '.'
-                a[i+k][j] = 'x'
 
-r, c = map(int, input().split())
-a = [list(input().strip()) for _ in range(r)]
-n = int(input())
-s = list(map(int, input().split()))
-dq = deque()
-
-left = 1
-while n:
-    index = s.pop(0)
-    destroy(index, left)
-
-    while dq:
-        x, y = dq.popleft()
+who = 1
+for height in height_list:
+    candidate = []
+    check(who, height)
+    # bfs로 클러스터 찾기
+    for x, y in candidate:
+        visited = [[0 for _ in range(C)] for _ in range(R)]
         bfs(x, y)
 
-    left *= -1
-    n -= 1
+    who = -1 * who
 
-for i in range(r):
-    for j in range(c):
-        print(a[i][j], end='')
-    print()
+for i in graph:
+    print("".join(i))
