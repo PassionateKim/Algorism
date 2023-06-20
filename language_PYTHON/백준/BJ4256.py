@@ -1,39 +1,41 @@
-# 복습 횟수:0, 01:00:00, 복습필요O
+# 2023-06-20
+# 복습 횟수:1, 01:00:00, 복습필요O
 import sys
 si = sys.stdin.readline
 
-def toPostorder(preorder, inorder):
-    if len(preorder) == 0:
-        return
-    elif len(preorder) == 1:
-        print(preorder[0], end=' ')
-        return
-    elif len(preorder) == 2:
-        print(preorder[1], preorder[0], end = ' ')
+def toPostOrder(preOrder: list, inOrder: list):
+    if(len(preOrder) == 0):
         return
     
-    root_idx = inorder.index(preorder[0])
-    left_inorder = inorder[0:root_idx]
-    left_preorder = preorder[1: 1+len(left_inorder)]
-    toPostorder(left_preorder, left_inorder)
+    if (len(preOrder) == 1):
+        print(preOrder[0], end=' ')
+        return
+    # 길이에 따른 분기가 필요함
+    root = preOrder[0]
+    
+    index = inOrder.index(root)
+    
+    left_preOrder = preOrder[1:1+index]
+    left_inOrder = inOrder[:index]
+    toPostOrder(left_preOrder, left_inOrder)
 
-    right_inorder = inorder[root_idx+1:]
-    right_preorder = preorder[1 + len(left_preorder):]
-    toPostorder(right_preorder, right_inorder)
+    right_preOrder = preOrder[1+index:]
+    right_inOrder = inOrder[index+1:]
+    toPostOrder(right_preOrder, right_inOrder)
 
-    print(preorder[0], end=' ')
+    print(preOrder[0], end=' ')    
 
-
-
+    return
 
 T = int(si())
 for i in range(T):
     N = int(si())
-    for i in range(2):
-        if i == 0:
-            preorder = list(map(int, si().split()))
-        else:
-            inorder = list(map(int, si().split()))
-
-    toPostorder(preorder, inorder)
     
+    for j in range(2):
+        if (j == 0):
+            preOrder = list(map(int, si().split()))
+        else:
+            inOrder = list(map(int, si().split()))
+    
+    toPostOrder(preOrder, inOrder)
+    print()
