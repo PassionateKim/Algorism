@@ -1,32 +1,29 @@
-# 복습 횟수:0, 01:00:00, 복습필요O
 # 2023-07-01
-
-def slidingWinodw(sequence, answer: list, k):
-    left, right= 0, 0
-    sumi = sequence[0] # 초기값
-    
-    while (left != len(sequence) and right != len(sequence)):
-        
-        if(sumi <= k):
-            if(sumi == k):
-                answer.append([left, right])
-
-            right += 1
-            if(right == len(sequence)): return
-            sumi += sequence[right]
-
-        else:
-            sumi -= sequence[left]
-            left += 1
-    
-    return
-
+# 2023-07-12
+# 복습 횟수:1, 00:30:00, 복습필요:* (3번째에 맞으면 끝)
 def solution(sequence, k):
-    answer = []
-    slidingWinodw(sequence, answer, k)
+    candidate = []
 
-    answer.sort(key= lambda x: [abs(x[1] - x[0]), x[0]])
+    def slidingWindow(candidate: list, sequence, k):
+        start = 0
+        end = 0
+        sumi = sequence[0]
+        while (start <= end and start != len(sequence) and end != len(sequence)):
+            if sumi >= k:
+                if sumi == k:
+                    candidate.append([start, end])
+                
+                sumi = sumi - sequence[start]
+                start += 1
+            else: # sumi < k:
+                end += 1
+                if end != len(sequence):
+                    sumi = sumi + sequence[end]
 
-    return answer[0]
+        return
+    
+    slidingWindow(candidate, sequence, k)
+    candidate.sort(key=lambda x: [x[1] - x[0], x[0]])
+    return candidate[0]
 
-solution([1, 1, 1, 2, 3, 4, 5], 5)
+solution([1, 1, 1,2, 3, 4, 5], 5)
