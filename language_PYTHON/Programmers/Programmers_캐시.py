@@ -1,29 +1,26 @@
-# 복습 횟수:0, 01:00:00, 복습필요O
-from collections import deque
+# 2023-07-13
+# 복습 횟수:1, 00:30:00, 복습필요:* (3번째에 맞으면 끝)
 def solution(cacheSize, cities):
-    cash = list()
     answer = 0
-    if cacheSize == 0:
-        answer = len(cities) * 5
-        return answer
-    
-    lowerCities = []
+    cash_table = []
+    lower_cities = []
     for city in cities:
-        lowerCities.append(city.lower())
+        city = city.lower()
+        lower_cities.append(city)
 
+    for city in lower_cities:
+        if city not in cash_table:
+            if cacheSize != 0:
+                if len(cash_table) >= cacheSize:
+                    cash_table.pop(0)
 
-    for city in lowerCities:
-        if city not in cash:
-            if(len(cash) >= cacheSize):
-                cash.pop(0)
-            cash.append(city)
+                cash_table.append(city)
             answer += 5
         else:
-            cityIndex = cash.index(city)
-            cash.pop(cityIndex)
-            cash.append(city)
+            cash_table.pop(cash_table.index(city))
+            cash_table.append(city)
             answer += 1
 
     return answer
 
-solution(5, ["Jeju", "Pangyo", "Seoul", "NewYork", "LA", "SanFrancisco", "Seoul", "Rome", "Paris", "Jeju", "NewYork", "Rome"])
+print(solution(0, ["Jeju", "Jeju", "Jeju", "Jeju", "Jeju"]))
