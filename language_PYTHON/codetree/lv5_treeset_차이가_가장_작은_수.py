@@ -1,43 +1,29 @@
-# 복습횟수:0, 02:00:00, 복습필요:***
-import sys
+# 2023-07-13
+# 복습 횟수:1, 01:00:00, 복습필요:***
 from sortedcontainers import SortedSet
+import sys
+si = sys.stdin.readline 
 
-INT_MAX = sys.maxsize
+N, M = map(int, si().split())
+s = SortedSet()
+answer = sys.maxsize
 
-# 변수 선언 및 입력:
-n, m = tuple(map(int, input().split()))
-arr = [
-    int(input())
-    for _ in range(n)
-]
+for i in range(N):
+    input = int(si())
+    s.add(input)
 
-# 입력으로 주어진 숫자를 전부 treeset에 넣어줍니다.
-s = SortedSet(arr)
+for target in s:
+    # 차이가 m 이상이면서 큰 제일 작은 수의 위치
+    bigger_index = s.bisect_left(target + M)
+    if (bigger_index != len(s)): # 존재한다면
+        answer = min(answer, s[bigger_index] - target)
 
-# 답을 저장합니다.
-ans = INT_MAX
+    # 차이가 m 이상이면서 작은 제일 큰 수의 위치
+    less_index = s.bisect_right(target - M) - 1
+    if less_index != -1:
+        answer = min(answer, target - s[less_index])
 
-# 각 숫자 x 대해
-# x보다 m 이상 더 크면서 가장 작은 값과
-# x보다 m 이상 더 작으면서 가장 큰 값을 구해
-# 차이가 가장 작은 경우를 갱신합니다.
-for x in arr:
-    # x보다 m 이상 더 크면서 가장 작은 값은
-    # r - x >= m를 만족하는 최소 r이므로
-    # r >= m + x을 만족하는 최소 r을 구하면 됩니다.
-    min_idx = s.bisect_left(m + x)
-    if min_idx != len(s):
-        ans = min(ans, s[min_idx] - x)
-
-    # x보다 m 이상 더 작으면서 가장 큰 값은
-    # x - r >= m를 만족하는 최대 r이므로
-    # r <= x - m을 만족하는 최대 r을 구하면 됩니다.
-    max_idx = s.bisect_right(x - m) - 1
-    if max_idx >= 0:
-        ans = min(ans, x - s[max_idx])
-
-# 불가능하다면 -1을 넣어줍니다.
-if ans == INT_MAX:
-    ans = -1
-
-print(ans)
+if answer == sys.maxsize:
+    print(-1)
+else:
+    print(answer)
