@@ -1,19 +1,21 @@
 # 2023-07-19
-# 복습 횟수:1, 01:00:00, 복습필요:***
+# 2023-07-24
+# 복습 횟수:2, 01:00:00, 복습필요:***
 import heapq
 import sys
 si = sys.stdin.readline 
 T = int(si())
 
+for _ in range(T):
+    N = int(si())
+    arr = list(map(int, si().split()))
 
-def find_mid():
+    max_pq = []
+    min_pq = []
     mid = arr[0]
-    max_pq, min_pq = [], []
-
-    print(mid, end = " ")
-
+    print(mid, end=' ')
     for i in range(1, N):
-        if i % 2 == 1:
+        if(i % 2 == 1):
             if arr[i] > mid:
                 heapq.heappush(min_pq, arr[i])
             else:
@@ -21,24 +23,13 @@ def find_mid():
 
         else:
             if len(max_pq) > len(min_pq):
-                new = -heapq.heappop(max_pq)
+                p = -heapq.heappop(max_pq)
             else:
-                new = heapq.heappop(min_pq)
-            
-            l, m, r = sorted([new, arr[i], mid])
+                p = heapq.heappop(min_pq)
+            l, mid, r = sorted([mid, p, arr[i]])
 
             heapq.heappush(min_pq, r)
             heapq.heappush(max_pq, -l)
-            mid = m
 
-            print(mid, end = " ")
-
-    print()        
-    return
-
-
-for i in range(T):
-    N = int(si())
-    arr = list(map(int, si().split()))
-
-    find_mid()
+            print(mid, end= ' ')
+    print()
