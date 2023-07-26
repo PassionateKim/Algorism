@@ -1,78 +1,55 @@
 # 전구와 스위치
-# 복습 횟수:0, 00:45:00, 복습필요O
+# 복습 횟수:1, 00:45:00, 복습필요X
 import sys
-from copy import deepcopy
-si = sys.stdin.readline
+si = sys.stdin.readline 
+
 N = int(si())
-
 current_state = list(map(int, si().rstrip()))
-wanted_state = list(map(int, si().rstrip()))
+hope_state = list(map(int, si().rstrip()))
 
-def check():
-    answer = 0
-    tmp = deepcopy(current_state) 
-    # 첫번째 전구를 키지 않는 경우
-    for i in range(1, len(tmp)):
-        if tmp[i-1] != wanted_state[i-1]:
-            if tmp[i-1] == 0:
-                tmp[i-1] = 1
-            else:
-                tmp[i-1] = 0
-            
-            if tmp[i] == 0:
-                tmp[i] = 1
-            else:
-                tmp[i] = 0
-
-            if i != len(tmp) - 1:
-                if tmp[i+1] == 0:
-                   tmp[i+1] = 1
-                else:
-                    tmp[i+1] = 0
-            
-            answer += 1
-
-    if tmp == wanted_state:
-        return answer
-
-    # 첫번째 전구를 키는 경우
-    answer = 1
-
-    tmp = deepcopy(current_state)
-
-    if tmp[0] == 0:
-        tmp[0] = 1
+def converter(index, coped_state):
+    if coped_state[index] == 1:
+       coped_state[index] = 0
     else:
-        tmp[0] = 0
-    
-    if tmp[1] == 0:
-        tmp[1] = 1
-    else:
-        tmp[1] = 0
+        coped_state[index] = 1
+# 맨 앞과 맨 끝만 차이가 있다. 
+# 맨 처음을 누른 경우 
+answer = []
 
-    for i in range(1, len(tmp)):
-        if tmp[i-1] != wanted_state[i-1]:
-            if tmp[i-1] == 0:
-                tmp[i-1] = 1
-            else:
-                tmp[i-1] = 0
-            
-            if tmp[i] == 0:
-                tmp[i] = 1
-            else:
-                tmp[i] = 0
 
-            if i != len(tmp) - 1:
-                if tmp[i+1] == 0:
-                   tmp[i+1] = 1
-                else:
-                    tmp[i+1] = 0
-            
-            answer += 1
+def on_off(candidate):
+    for i in range(1, len(coped_state)):
+        if i == len(coped_state) -1: # 마지막 인덱스인 경우
+            if coped_state[i-1] != hope_state[i-1]:
+                candidate += 1
+                converter(i-1, coped_state)
+                converter(i, coped_state)
+        else:
+            if coped_state[i-1] != hope_state[i-1]:
+                candidate += 1
+                converter(i-1, coped_state)
+                converter(i, coped_state)
+                converter(i+1, coped_state)
+    return candidate
 
-    if tmp == wanted_state:
-        return answer
-    
-    return -1
+coped_state = current_state[:]
+candidate1 = 1
+converter(0, coped_state)
+converter(1, coped_state)
+candidate1 = on_off(candidate1)
+if coped_state == hope_state:
+    answer.append(candidate1)
 
-print(check())
+# 맨 처음을 누르지 않은 경우
+
+candidate2 = 0
+coped_state = current_state[:]
+
+candidate2 = on_off(candidate2)
+if coped_state == hope_state:
+    answer.append(candidate2)
+
+if len(answer) == 0:
+    print(-1)
+else:
+    print(min(answer))
