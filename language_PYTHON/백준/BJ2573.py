@@ -1,101 +1,83 @@
 # 빙산
-# 복습 횟수:0, 01:00:00, 복습필요O
+# 복습 횟수:1, 00:30:00, 복습필요X
 import sys
 from collections import deque
-si = sys.stdin.readline
+si = sys.stdin.readline 
 
 N, M = map(int, si().split())
-graph = [list(map(int, si().split())) for _ in range(N)]
-dx = [-1, 1, 0, 0]
-dy = [0, 0, -1, 1]
 
-def bfs(i, j):
-    q = deque()
-    q.append([i, j])
-    visited[i][j] = -1 # 방문처리
+graph = []
 
-    while q:
-        x, y = q.popleft()
-        if graph[x][y] > 0: continue
-
-        for idx in range(4):
-            nx, ny = x + dx[idx], y + dy[idx]
-            if not (0 <= nx < N and 0 <= ny < M): continue
-            if visited[nx][ny] == -1: continue
-
-            if graph[nx][ny] != 0:
-                visited[nx][ny] += 1
-            else:
-                visited[nx][ny] = -1 
-            
-            q.append([nx, ny])
-    
-    return
-
-def bfs2(i, j, count):
-    q = deque()
-    q.append([i, j])
-    visited2[i][j] = count
-    
-    while q:
-        x, y = q.popleft()
-        for idx in range(4):
-            nx, ny = x + dx[idx], y + dy[idx]
-            if not (0 <= nx < N and 0 <= ny < M): continue
-            if visited2[nx][ny] == count: continue
-
-            if graph[nx][ny] != 0:
-                q.append([nx, ny])
-                visited2[nx][ny] = count
-    
-    return True
+for i in range(N):
+    tmp = list(map(int, si().split()))
+    graph.append(tmp)
 
 answer = 0
+dx = [-1, 1, 0, 0]
+dy =[0, 0, -1, 1]
+def bfs(x, y):
+    q = deque()
+    q.append([x, y])
+    visited[x][y] = cnt
 
-while True: 
-    flag = 1
-    visited = [[0 for _ in range(M)] for _ in range(N)]
+    while q:
+        x, y = q.popleft()
+        for i in range(4):
+            nx, ny = x + dx[i],  y + dy[i]
+            if not (0 <= nx < N and 0 <= ny < M): continue
+
+            if visited[nx][ny] == 0:
+                if graph[nx][ny] != 0:
+                    q.append([nx, ny])
+                    visited[nx][ny] = cnt
+    return
+while True:
+    # 전부 다 녹을 때까지 두 덩어리 이상으로 분리되지 않으면
+    flag = True
     for i in range(N):
         for j in range(M):
             if graph[i][j] != 0:
-                flag = 0
-                break
-        if flag == 0:
-            break
+                flag = False
     
-    # 전부 다 녹을 때까지 두 덩어리 이상으로 분리되지 않으면 프로그램은 0을 출력한다.
     if flag:
         print(0)
         break
-    
-    # 두 덩어리 이상으로 분리되면 출력한다.
-    count = 1
-    visited2 = [[0 for _ in range(M)] for __ in range(N)]
+
+    cnt = 1
+    visited = [[0 for i in range(M)] for i in range(N)]
+   
     for i in range(N):
         for j in range(M):
-            if graph[i][j] == 0: continue
-            if visited2[i][j] != 0: continue
+            if visited[i][j] == 0 and graph[i][j] != 0:
+                bfs(i, j)
+                cnt += 1
 
-            if bfs2(i, j, count):
-                count += 1
-    if count > 2:
+    # 두 개이상으로 분리되었다면  
+    if cnt >= 3:
         print(answer)
         break
-    
-    for i in range(N):
-        for j in range(M):
-            if visited[i][j] == -1: continue
-            if graph[i][j] != 0: continue
 
-            bfs(i, j)
-    
-    for i in range(N):
-        for j in range(M):
-            if visited[i][j] > 0:
-                val = graph[i][j] - visited[i][j]
-                if val < 0:
-                    val = 0
+    # 빙산 녹이기
+    tmp_list = [[0 for i in range(M)] for i in range(N)]
+
+    for x in range(N):
+        for y in range(M):
+            if graph[x][y] != 0: # 빙산일 때
+                tmp = 0
+                for idx in range(4):
+                    nx, ny = x + dx[idx], y + dy[idx]
+                    if not (0 <= nx < N and 0 <= ny < M): continue
+                    if graph[nx][ny] == 0:
+                        tmp += 1
                 
-                graph[i][j] = val
+                tmp_list[x][y] = tmp
+    # 빙산 녹이기
+    for x in range(N):
+        for y in range(M):
+            if graph[x][y] != 0:
+                graph[x][y] = graph[x][y] - tmp_list[x][y]
+
+                if graph[x][y] < 0:
+                    graph[x][y] = 0
     
     answer += 1
