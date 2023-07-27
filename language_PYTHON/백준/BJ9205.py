@@ -1,43 +1,42 @@
 # 맥주 마시면서 걸어가기
-# 복습 횟수:1, 00:30:00, 복습필요O
-
+# 복습 횟수:2, 00:30:00, 복습필요:3
 import sys
 from collections import deque
-si = sys.stdin.readline
+si = sys.stdin.readline 
 T = int(si())
 
 def bfs():
-    visited = [0 for i in range(n)]
+    visited = [0 for i in range(len(store_list))]
+
     q = deque()
-    q.append([location_x, location_y])
-
+    q.append([home[0], home[1], 20])
+    
     while q:
-        x, y = q.popleft()
-        if (abs(festival_x - x) + abs(festival_y - y) <= 1000):
+        home_x, home_y, beer_sum = q.popleft()
+        real_diff = abs(home_x - festival[0]) + abs(home_y - festival[1])
+        if real_diff <= 1000:
             return "happy"
-        
-        for i in range(n):
-            if visited[i] == 1: continue # 방문처리
-            
-            # 맨해튼 거리 계산
-            if abs(store_list[i][0] - x) + abs(store_list[i][1] - y) > 1000: continue
 
+        for i in range(len(store_list)):
+            store_x, store_y = store_list[i]
 
-            q.append([store_list[i][0], store_list[i][1]])
-            visited[i] = 1 # 방문처리
+            diff = abs(home_x - store_x) + abs(home_y - store_y)
+
+            if visited[i] != 0: continue
+            if diff <= beer_sum * 50:
+                visited[i] = 1 
+                q.append([store_x, store_y, 20])
 
     return "sad"
-
 for i in range(T):
-    n = int(si()) # 맥주를 파는 편의점 개수
-    location_x, location_y = map(int, si().split())
-    
+    N = int(si())
+    home = list(map(int, si().split()))
+
     store_list = []
-    for j in range(n):
+    for j in range(N):
         x, y = map(int, si().split())
         store_list.append([x, y])
-    
-    festival_x, festival_y = map(int, si().split())
 
-    output = bfs()
-    print(output)
+    festival = list(map(int, si().split()))
+
+    print(bfs())
