@@ -1,20 +1,39 @@
-# 복습 횟수:0, 01:00:00, 복습필요O
+# 복습 횟수:1, 00:30:00, 복습필요3
 def solution(board):
+    N = len(board)
+    M = len(board[0])
+
+    dp_table = [[0 for i in range(M)] for i in range(N)]
+
+    for i in range(N):
+        dp_table[i][0] = board[i][0]
+    
+
+    for i in range(M):
+        dp_table[0][i] = board[0][i]
+
+    for i in range(1, N):
+        for j in range(1, M):
+            if board[i][j] == 0: # 그냥 0인 경우
+                dp_table[i][j] = 0
+            else: # 1인 경우
+                left_up = dp_table[i-1][j-1]
+                up = dp_table[i-1][j]
+                left = dp_table[i][j-1]
+
+                if left_up == up == left:
+                    dp_table[i][j] = left_up + 1
+                else:
+                    dp_table[i][j] = min(left_up, up, left) + 1
+    
     answer = 0
-    n = len(board)
-    m = len(board[0])
-    new_board = [[0 for _ in range(m+1)] for _ in range(n+1)]
-    
-    for i in range(n):
-        for j in range(m):
-            new_board[i+1][j+1] = board[i][j]
-    
-    for i in range(1, n+1):
-        for j in range(1, m+1):
-            if new_board[i][j] == 1:
-                new_board[i][j] = min(new_board[i][j-1], new_board[i-1][j], new_board[i-1][j-1]) + 1
-                answer = max(answer, new_board[i][j] ** 2)
+    for i in range(N):
+        for j in range(M):
+            if dp_table[i][j] > answer:
+                answer = dp_table[i][j]
+
     
     return answer
 
-solution([[1]])
+
+print(solution([[0,1,1,1],[1,1,1,1],[1,1,1,1],[0,0,1,0]]))
