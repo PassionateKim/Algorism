@@ -1,114 +1,126 @@
 # 미네랄 
-# 복습 횟수:1, 01:00:00, 복습필요O
-from collections import deque
+# 복습 횟수:2, 02:00:00, 복습필요3
 import sys
-si = sys.stdin.readline
-
+from collections import deque
+si = sys.stdin.readline 
 R, C = map(int, si().split())
-graph = [list(map(str, si().rstrip())) for _ in range(R)]
-dx = [-1, 1, 0, 0]
-dy = [0, 0, -1, 1]
+graph = []
+
+for i in range(R):
+    tmp = list(map(str, si().rstrip()))
+    graph.append(tmp)
 
 N = int(si())
 height_list = list(map(int, si().split()))
 
-def check(who, height):
-    height = R - height
 
-    if who == 1:
-        for y in range(C):
-            if graph[height][y] == 'x':
-                r, c = height, y
-                graph[height][y] = '.'
+# 떠 있다는 것을 어떻게 체크할 것인가??
+# BFS()로 [0]에 닿는지 안 닿는지를 체크
+def delete_mineral(check_left_right):
+    # 왼쪽 오른쪽에 따라 삭제
+    if check_left_right == 1: # 왼쪽인 경우
+        index = 0
+        while True:
+            if index == C:
                 break
-    
+            if graph[height][index] == 'x':
+                graph[height][index] = '.'
+                return [height, index]
+            else:
+                index += 1
     else:
-        for y in range(C-1, -1, -1):
-            if graph[height][y] == 'x':
-                r, c = height, y
-                graph[height][y] = '.'
+        index = C-1
+        while True:
+            if index == -1:
                 break
 
+            if graph[height][index] == 'x':
+                graph[height][index] = '.'
+                return [height, index]
+            else:
+                index -= 1
 
-    if(r + c) != -2:
-        for idx in range(4):
-            nr, nc = r + dx[idx], c + dy[idx]
-            if not ( 0 <= nr < R and 0 <= nc < C): continue
-
-            if graph[nr][nc] == 'x':
-                candidate.append([nr, nc])
-    
-    return
-
+    return [-1, -1]
 
 def bfs(x, y):
-    q = deque()
+    flag = True
+    q = deque() 
     q.append([x, y])
-    visited[x][y] = 1 # 방문 처리
-    fall_list = []
+    visited[x][y] = 1 # 방문처리
 
     while q:
         x, y = q.popleft()
-    
-        # x의 위치가 땅이라면 떨어질 수 없으므로 return
-        if x == R - 1:
-            return
+        if x == R-1: # 연결된 것이 땅에 닿으면 cluster가 아니므로
+            flag = False
 
-        if graph[x+1][y] == '.':
-            fall_list.append([x, y])
-        
-        for idx in range(4):
-            nx, ny = x + dx[idx], y + dy[idx]
-
+        for i in range(4):
+            nx, ny = x + dx[i], y + dy[i]
             if not (0 <= nx < R and 0 <= ny < C): continue
 
             if visited[nx][ny] == 0 and graph[nx][ny] == 'x':
                 q.append([nx, ny])
-                visited[nx][ny] = 1 # 방문 처리
-    
-    fall(fall_list)
+                visited[nx][ny] = 1
 
-    return
+    return flag
+dx = [-1, 1, 0, 0]
+dy = [0, 0, -1, 1]
 
-def fall(fall_list):
-    k = 1
-    flag = 0
-    # 한칸씩 더 내려가며 최대 치를 체크한다.
-    while True:
-        for x, y in fall_list:
-            if x + k == R - 1:
-                flag = 1
-                break
-            
-            # cluster가 아니면서 벽인 경우
-            if graph[x + k + 1][y] == 'x' and visited[x + k + 1][y] == 0:
-                flag = 1
+check_left_right = 1
+for height in height_list:  
+    height = R - height # 우리의 좌표 x, y 에 맞추기 
+
+    # 왼쪽 오른쪽에 따라 mineral 삭제
+    check_break = delete_mineral(check_left_right)
+    # 왼쪽 오른쪽 변경
+    check_left_right = (-1) * check_left_right
+
+    # mineral 모양 체크
+    if check_break != [-1, -1]: #삭제된 것이 존재하는 경우
+        # 4 방향 체크 candidate
+        x, y = check_break
+        for idx in range(4):
+            nx, ny = x + dx[idx], y + dy[idx]
+            if not (0 <= nx < R and 0 <= ny < C): continue
+            if graph[nx][ny] == '.': continue # cluster인지를 체크해야하므로
+            visited = [[0 for i in range(C)] for i in range(R)]
+            isCluster = bfs(nx, ny)
+
+            if isCluster:
                 break
         
-        if flag:
-            break
+        # 내리기
+        if isCluster: # Cluster가 존재하는 경우
+            down_point = 1000
 
-        k += 1
-    
-    for x in range(R-1, -1, -1):
-        for y in range(C):
-            if visited[x][y] == 1 and graph[x][y] == 'x':
-                graph[x][y] = '.'
-                graph[x+k][y] = 'x'
-    
-    return
+            for i in range(R):
+                for j in range(C):
+                    if visited[i][j] == 1: # 
+                       tmp = 0
+                       cnt = 1
+                       while True:
+                            if visited[i+cnt][j] == 1: # 같은 무리라면
+                                break
+                            
+                            if graph[i+cnt][j] == 'x': # 종료
+                                down_point = min(down_point, tmp)
+                                break
 
+                            if i+cnt == R-1:
+                                down_point = min(down_point, cnt)
+                                break
 
-who = 1
-for height in height_list:
-    candidate = []
-    check(who, height)
-    # bfs로 클러스터 찾기
-    for x, y in candidate:
-        visited = [[0 for _ in range(C)] for _ in range(R)]
-        bfs(x, y)
+                            if visited[i+cnt][j] != 1 and graph[i+cnt][j] == '.': # 같은 무리가 아니고 내려갈 수 있으면
+                                tmp += 1
+                                cnt += 1
+                            
+                            
+            
+            for i in range(R-1, -1, -1):
+                for j in range(C):
+                    if visited[i][j] == 1: 
+                        graph[i+down_point][j] = graph[i][j]
+                        graph[i][j] = '.'
 
-    who = -1 * who
 
 for i in graph:
     print("".join(i))
