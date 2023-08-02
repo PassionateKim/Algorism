@@ -1,110 +1,78 @@
 # 캐슬 디펜스
-# 복습 횟수:2, 01:00:00, 복습필요O
+# 복습 횟수:3, 01:30:00, 복습필요3
 import sys
 import copy
 from itertools import combinations
-si = sys.stdin.readline
+si = sys.stdin.readline 
+
 N, M, D = map(int, si().split())
 
-can_graph = []
+graph = []
 for i in range(N):
-    can_graph.append(list(map(int, si().split())))
+    tmp = list(map(int, si().split()))
+    graph.append(tmp)
 
-archor_combi = list(combinations(range(M), 3))
 answer = 0
-for arch1, arch2, arch3 in archor_combi:
-    graph = copy.deepcopy(can_graph)
 
-    tmp = 0
-    while True: 
-        enemy_list = dict()
+archor_position_list = list(combinations(range(M), 3))
+
+def archor_shot(archor):
+        # archor 1
+
+    for d in range(1, D+1):
+        archor_x, archor_y = N, archor - d # 5, -1
+        check = -1
+        for i in range(2*d - 1):# d = 3   2d - 1 = 5
+                # 중간에서 바꾸기
+            if i == d:
+                check = (-1) * check
+                
+            archor_x += check
+            archor_y += 1
+                # 0 일때 (4, 0)
+                # 1 일때 (3, 1)
+                # 2 일때 (2, 2)
+                # 3 일때 (3, 3)
+                # 4 일때 (4, 4)
+
+            if not (0 <= archor_x < N and 0 <= archor_y < M): continue
+
+            if tmp_graph[archor_x][archor_y] == 1:
+                target_location_set.add(tuple([archor_x, archor_y]))
+                return
+
+for archor1, archor2, archor3 in archor_position_list:
+
+    candidate = 0
+    tmp_graph = copy.deepcopy(graph)
+
+    while True:
         # 탈출 조건
-        check = 1
+        flag = True
         for i in range(N):
             for j in range(M):
-                if graph[i][j] == 1:
-                    check = 0
-        if check:
+                if tmp_graph[i][j] == 1:
+                    flag = False
+        if flag:
+            answer = max(answer, candidate)
             break
-        
-        flag = 0
-        # arch1
-        for distance in range(1, D+1): # 1, 2, 3
-            x, y = N, arch1 - distance
-            diff = -1
-            for d in range(distance * 2 - 1): # 맨해튼 거리로 풀기
-                if x == N - (distance):
-                    diff = 1
 
-                x = x + diff
-                y = y + 1
+        target_location_set = set()
+        # 궁수 쏘기
+        archor_shot(archor1)
+        archor_shot(archor2)
+        archor_shot(archor3)
 
-                if not (0 <= x < N and 0 <= y < M): continue # 범위 밖은 out
 
-                if graph[x][y] == 1: #적이라면 쏜다
-                    enemy_list[(x, y)] = 1
-                    flag = 1
-                
-                if flag:
-                    break
-            if flag:
-                break
-        
-        flag = 0    
-        # arch2
-        for distance in range(1, D+1): # 1, 2, 3
-            x, y = N, arch2 - distance
-            diff = -1
-            for d in range(distance * 2 - 1): # 맨해튼 거리로 풀기
-                if x == N - (distance):
-                    diff = 1
+        # 체크 -> 그 부분 적 없애기
+        for target_x, target_y in target_location_set:
+            candidate += 1
+            tmp_graph[target_x][target_y] = 0 # 죽이기
+                    
 
-                x = x + diff
-                y = y + 1
-
-                if not (0 <= x < N and 0 <= y < M): continue # 범위 밖은 out
-
-                if graph[x][y] == 1: #적이라면 쏜다
-                    enemy_list[(x, y)] = 1
-                    flag = 1
-                
-                if flag:
-                    break
-            if flag:
-                break
-        
-        flag = 0
-        # arch3
-        for distance in range(1, D+1): # 1, 2, 3
-            x, y = N, arch3 - distance
-            diff = -1
-            for d in range(distance * 2 - 1): # 맨해튼 거리로 풀기
-                if x == N - (distance):
-                    diff = 1
-
-                x = x + diff
-                y = y + 1
-
-                if not (0 <= x < N and 0 <= y < M): continue # 범위 밖은 out
-
-                if graph[x][y] == 1: #적이라면 쏜다
-                    enemy_list[(x, y)] = 1
-                    flag = 1
-                
-                if flag:
-                    break
-            if flag:
-                break
-        
-        for x, y in enemy_list.keys():
-            tmp += 1
-            graph[x][y] = 0 # 죽이기
-        
+        # 적 내리기
         for i in range(N-2, -1, -1):
-            graph[i+1] = graph[i]
-
-        graph[0] = [0] * M
-
-    answer = max(answer, tmp)
+            tmp_graph[i+1] = tmp_graph[i]
+        tmp_graph[0] = [0] * M
 
 print(answer)
