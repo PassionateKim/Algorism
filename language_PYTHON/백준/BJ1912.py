@@ -1,15 +1,14 @@
 # 연속합
-# 00:45:00
+# 복습횟수:1, 00:45:00, 복습필요3
+# dp로 풀어보자
+
 import sys
-si = sys.stdin.readline
-
+si = sys.stdin.readline 
 N = int(si())
-suyeol = list(map(int, si().split()))
-dp = [0] * (N)
+arr = list(map(int, si().split()))
 
-dp[0] = suyeol[0]
-# 로직
+
 for i in range(1, N):
-    dp[i] = max(dp[i-1] + suyeol[i], suyeol[i])
- 
-print(max(dp))
+    arr[i] = max(arr[i], arr[i-1] + arr[i])
+
+print(max(arr))
