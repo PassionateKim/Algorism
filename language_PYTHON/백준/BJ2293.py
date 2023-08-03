@@ -1,5 +1,5 @@
 # 동전 1
-# 복습횟수:1, 00:30:00
+# 복습 횟수:2, 01:00:00, 복습필요3
 import sys
 si = sys.stdin.readline
 N, K = map(int, si().split())
