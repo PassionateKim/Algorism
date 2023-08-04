@@ -1,30 +1,24 @@
 # 숫자 카드
-# 복습 횟수:1, 00:15:00, 복습필요X
+# 복습 횟수:2, 00:10:00, 복습필요X
 import sys
-si = sys.stdin.readline
+si = sys.stdin.readline 
+
 N = int(si())
-my_card = list(map(int, si().split()))
-my_card.sort()
+own_list = list(map(int, si().split()))
+own_list.sort()
+
 M = int(si())
-check_list = list(map(int, si().split()))
+check_card_list = list(map(int , si().split()))
 
-answer = []
+own_dict = dict()
 
-def binary(start, end, target):
-    while start <= end:
-        mid = (start + end) // 2
-        if my_card[mid] == target:
-            return 1
+for own in own_list:
+    if own not in own_dict.keys():
+        own_dict[own] = 1
 
-        if my_card[mid] > target:
-            end = mid - 1
-        else:
-            start = mid + 1
 
-    return 0
-
-for check in check_list:
-    val = binary(0, len(my_card) - 1, check)
-    answer.append(val)
-
-print(*answer)
+for check_card in check_card_list:
+    if check_card in own_dict.keys():
+        print(1, end = " ")
+    else:
+        print(0, end = " ")
