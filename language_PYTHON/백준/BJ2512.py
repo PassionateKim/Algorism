@@ -1,29 +1,34 @@
 # 예산
-# 복습 횟수:1, 00:30:00, 복습필요:X
+# 복습 횟수:2, 00:30:00, 복습필요:X
 import sys
-si = sys.stdin.readline
+si = sys.stdin.readline 
 N = int(si())
-request_list = list(map(int, si().split()))
-budget = int(si())
-answer = 0
 
-def binary(start, end, target):
-    global answer
+arr = list(map(int, si().split()))
+budget = int(si())
+
+def  binary_search():
+    answer = 0
+
+    start = 0
+    end = max(arr)
+
     while start <= end:
-        sumi = 0
         mid = (start + end) // 2
-        for request in request_list:
-            if mid >= request:
-                sumi += request
+
+        candidate_sum = 0
+        for val in arr:
+            if mid >= val:
+                candidate_sum += val
             else:
-                sumi += mid
+                candidate_sum += mid
         
-        if sumi <= target:
+        if candidate_sum <= budget:
             answer = mid
             start = mid + 1
         else:
-            end = mid - 1 
-    return
+            end = mid - 1
 
-binary(0, max(request_list), budget)
-print(answer)
+    return answer
+
+print(binary_search())
