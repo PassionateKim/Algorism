@@ -1,49 +1,33 @@
 # A와 B 2
-# 복습 횟수:1, 00:45:00, 복습필요O
-# == 시간초과 코드 == #
+# 복습 횟수:2, 00:30:00, 복습필요X
 import sys
-si = sys.stdin.readline
+si = sys.stdin.readline 
 S = list(map(str, si().rstrip()))
 T = list(map(str, si().rstrip()))
 
-def dfs(S: list):
-    if len(S) == len(T):
-        if S == T:
-            print(1)
-            exit()
-        else: return
+
+answer = 0 
+
+def dfs(t: list):
+    global answer
+    if len(t) == 0:
+        return
     
-    S.append('A')
-    dfs(S)
-    S.pop() # 원상 복구
+    if t == S:
+        answer = 1
+        return
     
-    S.append('B')
-    S.reverse()
-    dfs(S)
-    S.pop(0) # 원상 복구
-    S.reverse() 
+    if t[-1] == 'A':
+        t.pop()
+        dfs(t)
+        t.append('A')
 
-dfs(S)
-print(0)
-
-# == 정답 코드 == #
-import sys
-si = sys.stdin.readline
-S = list(map(str, si().rstrip()))
-T = list(map(str, si().rstrip()))
-
-def dfs(T: list):
-    if S == T: 
-        print(1)
-        exit()
-
-    if len(T) <= len(S): return
-
-    if T[-1] == 'A':
-        dfs(T[:-1]) # A를 뺸다
-
-    if T[0] == 'B':
-        dfs(list(reversed(T[1:])))
+    if t[0] == 'B':
+        t.reverse()
+        t.pop()
+        dfs(t)
+        t.append('B')
+        t.reverse()
 
 dfs(T)
-print(0)
+print(answer)
