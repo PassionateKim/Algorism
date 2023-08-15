@@ -1,5 +1,5 @@
 # 촌수 계산
-# 복습 횟수:0, 00:30:00, 복습필요O
+# 복습 횟수:1, 00:30:00, 복습필요X
 import sys
 from collections import deque
 si = sys.stdin.readline
