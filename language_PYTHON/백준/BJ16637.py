@@ -1,76 +1,97 @@
 # 괄호 추가하기
-# 복습 횟수:0, 02:00:00, 복습필요O
+# 복습 횟수:1, 02:00:00, 복습필요3
 import sys
-from itertools import combinations
-si = sys.stdin.readline
+from collections import deque
+si = sys.stdin.readline 
 N = int(si())
-oper_list = list(map(str, si().rstrip()))
+arr = list(map(str, si().rstrip()))
 
-answer = -2**31
-oper_num = N//2
+answer = -sys.maxsize
+visited = [0 for i in range(N)]
+max_depth = ((N // 2) + 1) // 2
 
-def first_cal(f_l):
-    arr = []
-    i = 0
+def calculate(first, second, arr):
+    operator = arr[first + 1]
+    first = int(arr[first])
+    second = int(arr[second])
 
-    while i < len(oper_list):
-        if i in f_l:
-            a = arr.pop()
-            if oper_list[i] == '+':
-                num = int(a) + int(oper_list[i+1])
-                arr.append(str(num))
-                i += 2
-            elif oper_list[i] == '-':
-                num = int(a) - int(oper_list[i+1])
-                arr.append(str(num))
-                i += 2
-            else:
-                num = int(a) * int(oper_list[i+1])
-                arr.append(str(num))
-                i += 2
-        else:
-            arr.append(oper_list[i])
-            i += 1
-
-    return arr
-
-def last_cal(f_li):
-    number = int(f_li[0])
-
-    for i in range(1, len(f_li) -1, 2):
-        if f_li[i] == '+':
-            number += int(f_li[i+1])
-        elif f_li[i] == '-':
-            number -= int(f_li[i+1])
-        else:
-            number *= int(f_li[i+1])
-            
-    return number
-
-for count in range((oper_num+1)//2 + 1): # count 가능한 괄호의 개수
-    oper_idx = [i for i in range(1, N, 2)]
-    candidate_opers = list(combinations(oper_idx, count))
-    real_opers_idx = []
-    # 차이가 2인것이 하나라도 있는 경우는 빼기
-    for candidate in candidate_opers:
-        flag = 1
-        for i in range(len(candidate)-1):
-            if candidate[i+1] == candidate[i] + 2: 
-                flag = 0
-                break
-        if flag:
-            real_opers_idx.append(candidate)
+    if operator == '+':
+        return str(first + second)
     
-    # 괄호있는 값을 계산 한 것을 치환해야함 - 첫번째 계산
-    if len(real_opers_idx[0]) != 0: 
-        for real_opers in real_opers_idx: #[(1, 5) (1, 7)]
-            first_list = first_cal(real_opers)
-            # 순서대로 계산하기
-            
-            result = last_cal(first_list)
-            answer = max(answer, result)
-    else: # 괄호가 없는 경우 
-        result = last_cal(oper_list)
-        answer = max(answer, result)
+    elif operator == '*':
+        return str(first * second)
 
-print(answer)       
+    else:
+        return str(first - second)
+    
+def dfs(depth, current):
+    global answer
+    
+    if (depth == max_depth):
+        
+        # 계산하기
+        if 1 in visited: # 괄호가 하나라도 있는 경우
+            tmp = []
+            isgwalho = False
+            for i in range(N):
+                if visited[i] == 1: # 괄호가 시작하면
+                    if not isgwalho:
+                        isgwalho = True
+                    else: # 괄호가 끝나면
+                        tmp_result = calculate(i-2, i, arr)
+                        tmp.append(tmp_result)
+                        isgwalho = False # 괄호 초기화
+                else: # 괄호가 아니라면
+                    if not isgwalho:
+                        tmp.append(arr[i])
+
+
+            candidate_result = calculateList(tmp)     
+            answer = max(answer, candidate_result)
+
+
+        else: #괄호가 하나도 없는 경우
+            candidate_result = calculateList(arr)     
+            answer = max(answer, candidate_result)
+        
+        
+        return
+    
+    dfs(depth + 1, current)
+
+    for idx in range(current, N-1):
+        if visited[idx] != 0: continue 
+        if idx % 2 == 1: continue
+        visited[idx] = 1 # 방문처리
+        visited[idx + 2] = 1 # 방문처리
+        dfs(depth + 1, idx + 1)
+
+        visited[idx] = 0 # 초기화
+        visited[idx + 2] = 0 
+
+def calculateList(tmp):
+    q = deque()
+    for i in range(len(tmp)):
+        if tmp[i] not in ['+', '-','*']:
+            q.append(int(tmp[i]))
+
+        if len(q) == 2:
+            first = q.popleft()
+            second = q.popleft()
+
+            operator = tmp[i-1]
+            if operator == '+':
+                result_val = first + second
+            elif operator == '*':
+                result_val = first * second
+            else:
+                result_val = first - second
+
+            q.append(result_val)# 초기화
+        
+    result = q.popleft()
+
+    return result
+
+dfs(0, 0)
+print(answer)
