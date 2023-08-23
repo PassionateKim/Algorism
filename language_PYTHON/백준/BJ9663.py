@@ -1,29 +1,30 @@
 # N-Queen
-# 복습 횟수:1, 02:30:00, 복습필요O
+# 복습 횟수:2, 01:30:00, 복습필요1
 import sys
-si = sys.stdin.readline
+si = sys.stdin.readline 
 N = int(si())
 
-row = [0] * (N)
+visited = [0 for i in range(N)]
 answer = 0
 
 def isPromising(x):
     for i in range(x):
-        if row[x] == row[i] or abs(row[x] - row[i]) == abs(x - i):
+        if visited[x] == visited[i] or abs(visited[x] - visited[i]) == abs(x - i):
             return False
-
+    
     return True
 
-def dfs(index):
+def dfs(depth):
     global answer
-    if index == N:
+
+    if depth == N:
         answer += 1
 
     else:
         for i in range(N):
-            row[index] = i
-            if isPromising(index):
-                dfs(index + 1)            
+            visited[depth] = i
+            if isPromising(depth):
+                dfs(depth + 1)  
 
 dfs(0)
 print(answer)
