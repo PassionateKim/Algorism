@@ -1,68 +1,76 @@
 # 스티커 붙이기
-# 복습 횟수:1, 00:30:00, 복습필요O
+# 복습 횟수:2, 01:30:00, 복습필요X
 import sys
-si = sys.stdin.readline
-N, M , K = map(int, si().split())
-graph = [[0 for _ in range(M)] for _ in range(N)]
+si = sys.stdin.readline 
+N, M, T = map(int, si().split())
 
-def canAttach(sticker):
-    n = len(sticker)
-    m = len(sticker[0])
+graph = []
 
-    for x in range(n):
-        for y in range(m):
-            if sticker[x][y] == 1 and graph[i+x][j+y] == 1:
-                return False
-    return True
+for i in range(N):
+    tmp = [0 for i in range(M)]
+    graph.append(tmp)
 
-def attach(sticker):
-    n = len(sticker)
-    m = len(sticker[0])
+def attach_sticker_ok_and_attach(sticker):
+    # 알맞은 위치 찾기
+    for i in range(N):
+        for j in range(M):
+            isOk = True
+            for x in range(len(sticker)):
+                for y in range(len(sticker[0])):
+                    # 1. 범위밖을 벗어나는 경우
+                    if not (0 <= x + i < N and 0 <= y + j < M): 
+                        isOk = False
+                        continue
+                    # 2. 이미 스티커가 붙어있는 경우
+                    if sticker[x][y] == 1 and graph[x + i][y + j] == 1: 
+                        isOk = False
+            # 조건에 맞으면 붙인다.        
+            if isOk:
+                for x in range(len(sticker)):
+                    for y in range(len(sticker[0])):
+                        if graph[x + i][y + j] == 1: continue # 삭제되는 것 예방
 
-    for x in range(n):
-        for y in range(m):
-            if graph[i + x][j + y] == 0: # 스티커가 붙지 않은 경우에만 
-                graph[i + x][j + y] = sticker[x][y]
+                        graph[x + i][y + j] = sticker[x][y]
 
-def rotate90(sticker):
-    n = len(sticker)
-    m = len(sticker[0])
-    new_sticker = [[0 for _ in range(n)] for _ in range(m)]
+                return True
 
-    for i in range(n):
-        for j in range(m):
-            new_sticker[j][n-1-i] = sticker[i][j]
+    return False
 
-    return new_sticker
+def lotate(sticker):
+    tmp = [[0 for i in range(len(sticker))] for i in range(len(sticker[0]))] # ex) 2 x 5 -> 5 x 2
 
+    for i in range(len(sticker[0])): # 0 -> 1 -> 2 -> 3 -> 4
+        for j in range(len(sticker) - 1, -1, -1): # 1 -> 0
+            tmp[i][len(sticker) - 1 - j] = sticker[j][i]
 
-for i in range(K):
-    n, m = map(int, si().split())
-    sticker = [list(map(int, si().split())) for _ in range(n)]
+    return tmp
 
-    cnt = 0
-    isTrue = False
-    while cnt < 4:
-        if isTrue:
-            break
+def init_shape(sticker):
 
-        for i in range(N - len(sticker) + 1):
-            if isTrue:
-                break
-            for j in range(M - len(sticker[0]) + 1):
-                if canAttach(sticker):
-                    attach(sticker)
-                    isTrue = True
-                
-                if isTrue:
-                    break
-        
-        sticker = rotate90(sticker)
-        cnt += 1
+    for i in range(4): # 0, 90, 180, 270
+        # 스티커를 붙일 수 있는지 체크
 
+        if attach_sticker_ok_and_attach(sticker):
+            return
+        # 붙이지 못한다면 lotate()
+        else:
+            sticker = lotate(sticker)
 
-answer = 0 
+    return
+
+for _ in range(T):
+    height, width = map(int, si().split())
+    sticker = []
+    for i in range(height):
+        tmp = list(map(int, si().split()))
+        sticker.append(tmp)
+
+    init_shape(sticker)
+
+answer = 0
 for i in range(N):
     for j in range(M):
-        answer += graph[i][j]
+        if graph[i][j] == 1:
+            answer += 1
+
 print(answer)
