@@ -32,3 +32,4 @@ def bfs():
 bfs()
 for i in range(2, len(parent)):
     print(parent[i])
+    
