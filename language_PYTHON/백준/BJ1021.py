@@ -1,37 +1,62 @@
 #회전하는 큐
-# 복습 횟수:2,00:30:00, 복습필요O
+# 복습 횟수:3, 00:45:00, 복습필요X
 import sys
 from collections import deque
-si = sys.stdin.readline
+si = sys.stdin.readline 
 N, M = map(int, si().split())
-double_q = deque ()
 
-for i in range(1, N + 1):
-    double_q.append(i)
-
-li = list(map(int, si().split()))
+pick_list = list(map(int, si().split()))
+original_list = deque([i for i in range(1, N + 1)])
 answer = 0
-for val in li:
-    if double_q[0] == val:
-        double_q.popleft()
+
+
+for target in pick_list:
+    target_index = original_list.index(target)
+
+    
+    left = 0
+    right = len(original_list) - 1
+    mid = (left + right) // 2
+
+    if len(original_list) % 2 == 0: # 짝수인 경우
+        if target_index <= mid + 1: # 왼쪽에서 뺀다.
+            while True:
+                if original_list[0] == target:
+                    original_list.popleft()
+                    break
+
+                val = original_list.popleft()
+                answer += 1
+                original_list.append(val)
+                
+        else:
+            while True:
+                if original_list[0] == target:
+                    original_list.popleft()
+                    break
+
+                val = original_list.pop()
+                answer += 1
+                original_list.appendleft(val)
     else:
-        left = double_q.index(val)
-        right = len(double_q) - left
-        if left <= right:
+        if target_index <= mid: # 왼쪽에서 뺀다.
             while True:
-                if double_q[0] == val:
-                    double_q.popleft()
+                if original_list[0] == target:
+                    original_list.popleft()
                     break
-                tmp = double_q.popleft()
-                double_q.append(tmp)
+
+                val = original_list.popleft()
                 answer += 1
-        else: # left > right:
+                original_list.append(val)
+                
+        else:
             while True:
-                if double_q[0] == val:
-                    double_q.popleft()
+                if original_list[0] == target:
+                    original_list.popleft()
                     break
-                tmp = double_q.pop()
-                double_q.appendleft(tmp)
+
+                val = original_list.pop()
                 answer += 1
+                original_list.appendleft(val)
 
 print(answer)
