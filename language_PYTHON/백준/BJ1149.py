@@ -1,21 +1,19 @@
 # RGB 거리
 import sys
-si = sys.stdin.readline
-
+si = sys.stdin.readline 
 N = int(si())
-RED = []
-GREEN = []
-BLUE = []
 
+dp_rgb = [[0, 0, 0] for i in range(N)]
 for i in range(N):
-    r, g, b = map(int, si().split())
-    RED.append(r)
-    GREEN.append(g)
-    BLUE.append(b)
+    red, green, blue = map(int, si().split())
+    
+    if i == 0:
+        dp_rgb[0][0] = red
+        dp_rgb[0][1] = green
+        dp_rgb[0][2] = blue
+    else:
+        dp_rgb[i][0] = min(red + dp_rgb[i-1][1], red + dp_rgb[i-1][2])
+        dp_rgb[i][1] = min(green + dp_rgb[i-1][0], green + dp_rgb[i-1][2])
+        dp_rgb[i][2] = min(blue + dp_rgb[i-1][0], blue + dp_rgb[i-1][1])
 
-# DP로 계산하기
-for i in range(1, N):
-    RED[i] = min(GREEN[i-1] + RED[i], BLUE[i-1] + RED[i]) 
-    GREEN[i] = min(RED[i-1] + GREEN[i], BLUE[i-1] + GREEN[i]) 
-    BLUE[i] = min(RED[i-1] + BLUE[i], GREEN[i-1] + BLUE[i]) 
-print(min(RED[N-1],GREEN[N-1], BLUE[N-1]))
+print(min(dp_rgb[N-1])) 
