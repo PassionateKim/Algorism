@@ -3,21 +3,28 @@ import sys
 si = sys.stdin.readline
 
 N = int(si())
-A = sorted(list(map(int, si().split())))
+A = list(map(int, si().split()))
+A.sort()
+
 M = int(si())
 B = list(map(int, si().split()))
 
-def lower_bound(start, end, target):
-    while start<=end:
+def binary_search(start, end, target):
+
+    while start <= end:
         mid = (start + end) // 2
-        if A[mid] == target:
-            return 1
-        if A[mid] > target:
+
+        if (A[mid] == target):
+            print(1)
+            return
+        
+        elif (A[mid] > target):
             end = mid - 1
         else:
             start = mid + 1
-    # 찾을 수 없는 경우
-    return 0
+        
+    print(0)
+    return
 
-for i in B:
-    print(lower_bound(0, len(A)-1, i)) 
+for target in B:
+    binary_search(0, len(A) - 1, target)
