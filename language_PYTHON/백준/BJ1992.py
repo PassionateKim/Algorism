@@ -1,30 +1,31 @@
-# 쿼드트리
-# 복습 횟수:1, 00:30:00, 복습필요X
+# 쿼드 트리
 import sys
-si = sys.stdin.readline
+si = sys.stdin.readline 
 N = int(si())
-graph = [list(map(int, si().rstrip())) for _ in range(N)]
-answer = []
-def dfs(x, y, n):
-    global answer
 
-    check = graph[x][y]
+graph = []
 
-    for i in range(x, x + n):
-        for j in range(y, y + n):
-            if check != graph[i][j]:
-                answer.append('(')
-                dfs(x, y, n//2)
-                dfs(x, y + n//2, n//2)
-                dfs(x + n//2, y, n//2)
-                dfs(x + n//2, y + n//2, n//2)
-                answer.append(')')
+for i in range(N):
+    tmp = list(map(str, si().rstrip()))
+    graph.append(tmp)
+
+answer = ""
+def divide_q(x, y, length):
+    global answer 
+    start = graph[x][y]
+    for i in range(x, x + length):
+        for j in range(y, y + length):
+            if graph[i][j] != start:
+                answer = answer + "("
+                divide_q(x, y, length // 2)
+                divide_q(x, y + length // 2, length // 2)
+                divide_q(x + length // 2, y, length // 2)
+                divide_q(x + length // 2, y + length // 2, length // 2)
+                answer = answer + ")"
                 return
+            
+    answer = answer + start
+    return
 
-    if check == 0:
-        answer.append(str(0))
-    else:
-        answer.append(str(1))
-
-dfs(0, 0, N)
-print("".join(answer))
+divide_q(0, 0, N)
+print(answer)
