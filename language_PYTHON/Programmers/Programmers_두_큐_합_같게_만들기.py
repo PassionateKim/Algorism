@@ -1,43 +1,44 @@
-import sys
+from collections import deque
 
 def solution(queue1, queue2):
+    answer = 0
+
     
-    n = len(queue1)
-    a = queue1 + queue2
-
-    target = sum(a)
-
-    if target % 2 != 0:
+    # 합이 홀수라면 어차피 안되므로 
+    if(sum(queue1) + sum(queue2)) % 2 == 1:
         return -1
     
-    target = target // 2
-
-    answer = sys.maxsize
-    en = 0
-    tot = a[0]
-
-    for st in range(2*n): # for 문
-        while tot < target: # while 문 최대 n // 2 번 연산 가능하지 않은가? -
-            en = (en + 1) % (2*n)
-
-            tot += a[en]
+    queue1 = deque(queue1)
+    queue2 = deque(queue2)
 
 
-        if tot == target:
-            moves = 0
-            if en < n - 1:
-                moves = 3 * n + 1 + st + en
-            else:
-                moves = st + (en - n + 1)
-            
-            answer = min(answer, moves)
+    count = 0 
+    q1_sum = sum(queue1)
+    q2_sum = sum(queue2)
+
+    n = len(queue1)
+    while count <= n * 4:
+
+        if q1_sum == q2_sum:
+            return answer
         
-        tot = tot -a[st]
+        if q1_sum > q2_sum:
+            val = queue1.popleft()
+            queue2.append(val)
 
+            q1_sum -= val
+            q2_sum += val
 
-    if answer == sys.maxsize:
-        answer = -1
+        else:
+            val = queue2.popleft()
+            queue1.append(val)
 
-    return answer
+            q1_sum += val
+            q2_sum -= val
 
-print(solution([1,2,4,2,4,2,4,5,5,5,6,5,4,4,2,6], [6,6,1,2,4,5, 2, 4, 5, 6, 12, 1, 3, 2, 4, 4]))
+        count += 1
+        answer += 1
+
+    return -1
+
+print(solution([3, 2, 7, 2], [4, 6, 5, 1] ))
