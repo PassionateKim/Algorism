@@ -1,26 +1,22 @@
 def solution(number, k):
-    answer = [number[0]]
+
+    answer = []
     
-    for index in range(1, len(number)):
-        
-        while k > 0 and answer and number[index] > answer[-1]:
-            answer.pop()
+    for num in number:
+        while k and answer and num > answer[-1]:
             k -= 1
-        
-        answer.append(number[index])
+            answer.pop()
 
-    # 자른 적이 없는 것이므로
-    if( k > 0 ):
-        # k 만큼 뒤에서부터 자른다
-        answer = number[:(len(number) - k)]
-    else:
-        pass    
+        answer.append(num)
 
+    if k > 0:
+        answer = answer[:len(number) - k]
+    
     return "".join(answer)
 
-solution("21", 1) # 2
-solution("19", 1) # 9
-solution("1924", 2)
+# solution("21", 1) # 2
+# solution("19", 1) # 9
+# solution("1924", 2)
 solution("13579", 3) 
 solution("98765", 3) # 98 
 solution("4177", 2) # 77
