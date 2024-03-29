@@ -1,16 +1,20 @@
 import sys
-N, M = map(int, sys.stdin.readline().split())
-arr = [list(map(int, sys.stdin.readline().split())) for _ in range(N)]
+si = sys.stdin.readline 
 
-K = int(sys.stdin.readline())
-do = [list(map(int, sys.stdin.readline().split())) for _ in range(K)]
+N, M = map(int, si().split())
+graph = []
 
-dp = [[0 for i in range(M+1)] for _ in range(N+1)]
+for i in range(N):
+    graph.append(list(map(int, si().split())))
 
-for i in range(1,N+1):
-    for j in range(1,M+1):
-        dp[i][j] = dp[i-1][j] + dp[i][j-1] + arr[i-1][j-1] - dp[i-1][j-1]
-        
-for _, line in enumerate(do):
-    i,j,x,y = line
-    print(dp[x][y]-(dp[x][j-1]+dp[i-1][y])+dp[i-1][j-1])
+prefix_sum_list = [[0 for i in range(M + 1)] for i in range(N + 1)]
+
+for i in range(1, N + 1):
+    for j in range(1, M + 1):
+        prefix_sum_list[i][j] = graph[i-1][j-1] + prefix_sum_list[i-1][j] + prefix_sum_list[i][j-1] - prefix_sum_list[i-1][j-1]
+
+K = int(si())
+for idx in range(K):
+    i, j, x, y = map(int, si().split())
+
+    print(prefix_sum_list[x][y] - prefix_sum_list[x][j-1] - prefix_sum_list[i-1][y] + prefix_sum_list[i-1][j-1])
