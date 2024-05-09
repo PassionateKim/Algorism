@@ -1,25 +1,26 @@
 # 2022-09-20
+# 2024-05-09
 # 방문 길이
-
 def solution(dirs):
-    visit = set()
-    x = 0; y = 0
-    for d in dirs:
-        if d == 'U' and y < 5:
-            visit.add(((x, y), (x, y+1)))
-            y += 1
+    answer = list()
+    
+    location = [0, 0]
+    for dir in dirs:
+        if dir == 'U':
+            if location[1] + 1 > 5: continue
+            answer.append(tuple([location[0], location[1], location[0], location[1] + 1]))
+            location[1] += 1
+        if dir == 'D':
+            if location[1] - 1 < -5: continue
+            answer.append(tuple([location[0], location[1] - 1, location[0], location[1]]))
+            location[1] -= 1
+        if dir == 'L':
+            if location[0] - 1 < -5: continue
+            answer.append(tuple([location[0] - 1, location[1], location[0], location[1]]))
+            location[0] -= 1
+        if dir == 'R':
+            if location[0] + 1 > 5: continue
+            answer.append(tuple([location[0], location[1], location[0] + 1, location[1]]))
+            location[0] += 1
             
-        elif d == 'D' and y > -5:
-            visit.add(((x, y-1), (x, y)))
-            y -= 1
-            
-        elif d == 'R' and x < 5:
-            visit.add(((x, y), (x+1, y)))
-            x += 1
-            
-        elif d == 'L' and x > -5:
-            visit.add(((x-1, y), (x, y)))
-            x -= 1
-    return len(visit)
-
-print(solution("ULURRDLLU"))
+    return len(set(answer)) 
